@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import Interaction
+import random
 
 
 def run_discord_bot():
@@ -15,9 +16,10 @@ def run_discord_bot():
         await ctx.send("pong")
 
     @bot.hybrid_command()
-    async def dm(interaction: Interaction):
-        user = await interaction.user.create_dm()
-        await user.send("help")
+    async def dm(ctx: commands.Context):
+        choose: str = random.choice(["sup?", "whats good?", "what ya need?"])
+        await ctx.author.send(choose)
+        await ctx.send("watch yo dm's")
 
     @bot.hybrid_command(name="test", description="testing a discord bot")
     async def test(ctx: commands.Context):
