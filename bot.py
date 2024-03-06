@@ -43,6 +43,10 @@ def run_discord_bot():
     async def on_ready():
         print("bot running")
         await bot.tree.sync()
-        await bot.change_presence(activity=discord.activity.Game(name="nick aan het voeren"))
+        await bot.change_presence(activity=discord.Activity(
+            type=discord.ActivityType.watching,
+            name="hoe elio mijn spullen steelt")
+        )
 
     bot.run(token)
+
