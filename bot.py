@@ -1,7 +1,9 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord import Interaction
 import random
+
+import lethal_functions
 
 
 def run_discord_bot():
@@ -42,10 +44,26 @@ def run_discord_bot():
     @bot.event
     async def on_ready():
         print("bot running")
+        change_status.start()
         await bot.tree.sync()
+
+    @tasks.loop(seconds=10)
+    async def change_status():
+        print("10 seconds passed")
         await bot.change_presence(activity=discord.Activity(
             type=discord.ActivityType.watching,
-            name="hoe elio mijn spullen steelt")
+            name=random.choice(["hoe elio mijn spullen steelt",
+                                "hoe stefan kinderen verzameld",
+                                "bas requirement engineering uitleggen",
+                                "videocolleges",
+                                "hoe ronald huilt als je een uurtje eerder weggaat",
+                                "hoe michiel maurice bedreigd",
+                                "kevin's hairline recede",
+                                "jordy's dad getting milk"
+                                ]),
+            details="Elio steelt weereens mijn spullen -_-",
+            description="Elio steelt weereens mijn spullen -_-"
+        )
         )
 
     bot.run(token)

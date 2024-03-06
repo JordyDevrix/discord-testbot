@@ -1,6 +1,8 @@
 from pypresence import Presence
 import random
 
+import lethal_functions
+
 
 def update_presence():
     rpc = Presence("1214671466780565575")
