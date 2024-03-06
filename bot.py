@@ -39,7 +39,7 @@ def run_discord_bot():
 
     @bot.hybrid_command()
     async def hello(ctx):
-        await ctx.send("krijg kanker!")
+        await ctx.send("ok")
 
     @bot.event
     async def on_ready():

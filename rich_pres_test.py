@@ -5,7 +5,7 @@ import lethal_functions
 
 
 def update_presence():
-    rpc = Presence("1214671466780565575")
+    rpc = Presence("")
     rpc.connect()
 
     while True:
