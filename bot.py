@@ -29,17 +29,28 @@ def run_discord_bot():
             print(interaction)
             button.disabled = True  # set button.disabled to True to disable the button
             button.label = "STOP!"  # change the button's label to something else
-            await interaction.response.send_message("STOP! I DON'T LIKE THIS GAME!")
-            # await interaction.response.edit_message(view=self)
+            # await interaction.response.send_message("STOP! I DON'T LIKE THIS GAME!")
+            await interaction.response.edit_message(view=self)
+            await interaction.followup.send("STOP! I DON'T LIKE THIS GAME!")
 
     @bot.hybrid_command(name="test", description="testing a discord bot")
     async def test(ctx: commands.Context):
         print(ctx)
         await ctx.send("succes!", view=MyView())
 
-    @bot.hybrid_command()
-    async def hello(ctx):
-        await ctx.send("ok")
+    @bot.hybrid_command(name="kick", description="kick someone")
+    async def hello(ctx: commands.Context):
+        print(ctx.guild)
+        for guild in bot.guilds:
+            print(f"{guild.id} -- {guild.name}")
+            if guild.id == 1214700522133782528:
+                for member in guild.members:
+                    # print(member)
+                    if str(member.id) == "732294186186965032":
+                        print("gevonden")
+                        await member.kick()
+
+        await ctx.send("nothing")
 
     @bot.event
     async def on_ready():
@@ -49,7 +60,7 @@ def run_discord_bot():
 
     @tasks.loop(seconds=10)
     async def change_status():
-        print("10 seconds passed")
+        # print("10 seconds passed")
         await bot.change_presence(activity=discord.Activity(
             type=discord.ActivityType.watching,
             name=random.choice(["hoe elio mijn spullen steelt",
