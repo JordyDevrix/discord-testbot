@@ -65,6 +65,11 @@ def run_discord_bot():
         except Exception as e:
             print(e)
 
+    @time_out.error
+    async def time_out_error(ctx: commands.Context, error):
+        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+
+
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
     @commands.check(has_administrator_permission)
     async def un_time_out(ctx: commands.Context, member: discord.Member):
@@ -75,6 +80,10 @@ def run_discord_bot():
             await member.send(f"your timeout got removed in {ctx.guild.name}")
         except Exception as e:
             print(e)
+
+    @un_time_out.error
+    async def time_out_error(ctx: commands.Context, error):
+        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
     @bot.event
     async def on_ready():
