@@ -7,7 +7,6 @@ from discord import Interaction
 import random
 import datetime
 
-
 import lethal_functions
 
 
@@ -61,14 +60,40 @@ def run_discord_bot():
                 await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds")
             else:
                 await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds for {reason}")
-            await member.send(f"you got timed out for {duration.seconds} seconds in {ctx.guild.name}")
+            await member.send(f"you got timed out for {duration.seconds} seconds in {ctx.guild.name} for {reason}")
         except Exception as e:
+            await ctx.send(
+                "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
+                ephemeral=True)
             print(e)
 
     @time_out.error
     async def time_out_error(ctx: commands.Context, error):
         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
+    @bot.hybrid_command(name="kick", description="kick a member from the server")
+    @commands.check(has_administrator_permission)
+    async def kick(ctx: commands.Context, member: discord.Member, reason=None):
+        print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
+        try:
+            if reason is None:
+                await member.send(f"You have been kicked from {ctx.guild.name}")
+            else:
+                await member.send(f"You have been kicked from {ctx.guild.name} for {reason}")
+            await member.kick(reason=reason)
+            if reason is None:
+                await ctx.send(f"{member.mention} got kicked from the server")
+            else:
+                await ctx.send(f"{member.mention} got kicked for {reason}")
+        except Exception as e:
+            await ctx.send(
+                "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
+                ephemeral=True)
+            print(e)
+
+    @kick.error
+    async def kick_error(ctx: commands.Context, error):
+        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
     @commands.check(has_administrator_permission)
@@ -79,6 +104,9 @@ def run_discord_bot():
             await ctx.send(f"{member.mention}'s timeout got removed")
             await member.send(f"your timeout got removed in {ctx.guild.name}")
         except Exception as e:
+            await ctx.send(
+                "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
+                ephemeral=True)
             print(e)
 
     @un_time_out.error
@@ -111,4 +139,3 @@ def run_discord_bot():
         )
 
     bot.run(token)
-
