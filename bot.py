@@ -1,12 +1,19 @@
+import time
+
 import discord
 from discord.ext import commands, tasks
+from discord.ext.commands import has_permissions
 from discord import Interaction
 import random
+import datetime
+
 
 import lethal_functions
 
 
 def run_discord_bot():
+    def has_administrator_permission(ctx):
+        return ctx.author.guild_permissions.administrator
 
     with open("token.txt", "r") as file:
         token: str = file.read()
@@ -38,19 +45,36 @@ def run_discord_bot():
         print(ctx)
         await ctx.send("succes!", view=MyView())
 
-    @bot.hybrid_command(name="kick", description="kick someone")
-    async def hello(ctx: commands.Context):
-        print(ctx.guild)
-        for guild in bot.guilds:
-            print(f"{guild.id} -- {guild.name}")
-            if guild.id == 1214700522133782528:
-                for member in guild.members:
-                    # print(member)
-                    if str(member.id) == "732294186186965032":
-                        print("gevonden")
-                        await member.kick()
+    @bot.hybrid_command(name="timeout", description="give a member a timeout")
+    @commands.check(has_administrator_permission)
+    async def time_out(ctx: commands.Context,
+                       member: discord.Member,
+                       seconds: int = 0,
+                       minutes: int = 0,
+                       hours: int = 0,
+                       reason=None):
+        print(f"{ctx.command} -- {member} -- {reason}")
+        duration = datetime.timedelta(seconds=seconds, minutes=minutes, hours=hours, days=0)
+        try:
+            await member.timeout(duration, reason=reason)
+            if reason is None:
+                await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds")
+            else:
+                await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds for {reason}")
+            await member.send(f"you got timed out for {duration.seconds} seconds in {ctx.guild.name}")
+        except Exception as e:
+            print(e)
 
-        await ctx.send("nothing")
+    @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
+    @commands.check(has_administrator_permission)
+    async def un_time_out(ctx: commands.Context, member: discord.Member):
+        print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
+        try:
+            await member.edit(timed_out_until=None)
+            await ctx.send(f"{member.mention}'s timeout got removed")
+            await member.send(f"your timeout got removed in {ctx.guild.name}")
+        except Exception as e:
+            print(e)
 
     @bot.event
     async def on_ready():
