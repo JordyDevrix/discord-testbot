@@ -1,0 +1,26 @@
+{
+  "my_list": [
+    {
+      "naam": "B01",
+      "vraag": "dit bord betekent:",
+      "img_path": "verkeersborden/B01.png",
+      "options": [
+        "Eenrichtingsweg",
+        "Voorrangsweg",
+        "Gevaarlijke kruising"
+      ],
+      "answer": "Voorrangsweg"
+    },
+    {
+      "naam": "B07",
+      "vraag": "bij dit bord moet je...",
+      "img_path": "verkeersborden/B07.png",
+      "options": [
+        "Voorrang verlenen aan alle bestuurders op de kruisende weg",
+        "Volledig stoppen",
+        "Stoppen en voorrang verlenen aan het verkeer op de kruisende weg"
+      ],
+      "answer": "Moet je stoppen en voorrang verlenen aan het verkeer op de kruisende weg"
+    }
+  ]
+}

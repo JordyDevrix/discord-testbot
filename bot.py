@@ -1,3 +1,4 @@
+import json
 import time
 
 import discord
@@ -31,7 +32,16 @@ def run_discord_bot():
 
     class MyView(discord.ui.View):  # Create a class called MyView that subclasses discord.ui.View
         @discord.ui.button(label="Let's play a game :D", style=discord.ButtonStyle.primary)
-        async def button_callback(self, interaction, button):
+        async def button1_callback(self, interaction, button):
+            print(interaction)
+            button.disabled = True  # set button.disabled to True to disable the button
+            button.label = "STOP!"  # change the button's label to something else
+            # await interaction.response.send_message("STOP! I DON'T LIKE THIS GAME!")
+            await interaction.response.edit_message(view=self)
+            await interaction.followup.send("STOP! I DON'T LIKE THIS GAME!")
+
+        @discord.ui.button(label="Let's play a game too :D", style=discord.ButtonStyle.primary)
+        async def button2_callback(self, interaction, button):
             print(interaction)
             button.disabled = True  # set button.disabled to True to disable the button
             button.label = "STOP!"  # change the button's label to something else
@@ -43,6 +53,38 @@ def run_discord_bot():
     async def test(ctx: commands.Context):
         print(ctx)
         await ctx.send("succes!", view=MyView())
+
+    class VerkeerButton(discord.ui.Button):
+        def __init__(self, option):
+            print(option)
+            super().__init__(label=option, style=discord.ButtonStyle.primary)
+
+        async def callback(self, interaction: discord.Interaction):
+            if self.label == self.view.answer:
+                await interaction.response.send_message("Goedzo")
+            else:
+                await interaction.response.send_message("Kut kind, ga leren ofz")
+
+    class VerkeerView(discord.ui.View):
+        def __init__(self, options, answer):
+            super().__init__()
+            self.answer = answer
+            for option in options:
+                try:
+                    self.add_item(VerkeerButton(option))
+                except Exception as e:
+                    print(e)
+
+    @bot.hybrid_command(name="verkeersbord", description="leer verkeersborden")
+    async def verkeersbord(ctx: commands.Context):
+        with open("verkeersborden.json", "r") as f:
+            data = json.load(f)
+            question = data["my_list"][random.randint(0, 1)]
+            print(question)
+
+        picture = discord.File(question["img_path"])
+        vraag = question["vraag"]
+        await ctx.send(file=picture, content=vraag, view=VerkeerView(options=question["options"], answer=question["answer"]))
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.check(has_administrator_permission)
