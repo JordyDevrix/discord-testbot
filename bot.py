@@ -61,7 +61,7 @@ def run_discord_bot():
 
         async def callback(self, interaction):
             if self.label == self.view.answer:
-                await interaction.response.send_message("Goedzo")
+                await interaction.response.send_message(f"Goedzo {self.ctx.author.mention}")
             else:
                 await interaction.response.send_message(f"{self.ctx.author.mention} Kut kind, ga leren ofz...")
 
