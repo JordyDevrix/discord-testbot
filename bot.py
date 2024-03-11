@@ -65,6 +65,27 @@ def run_discord_bot():
             else:
                 await interaction.response.send_message(f"{self.ctx.author.mention} Kut kind, ga leren ofz...")
 
+    class VolgendeButton(discord.ui.Button):
+        def __init__(self, option, ctx):
+            self.ctx: commands.Context = ctx
+            super().__init__(label=option, style=discord.ButtonStyle.green)
+
+        async def callback(self, interaction):
+            with open("verkeersborden.json", "r") as f:
+                data = json.load(f)
+                maxi = len(data["my_list"])
+                question = data["my_list"][random.randint(0, maxi)]
+                print(maxi)
+
+            picture_name = question["naam"]
+            picture_path = discord.File(f"verkeersborden/{picture_name}.png")
+            vraag = question["vraag"]
+            await interaction.response.send_message(file=picture_path,
+                                                    content=vraag,
+                                                    view=VerkeerView(options=question["options"],
+                                                                     answer=question["answer"],
+                                                                     ctx=self.ctx))
+
     class VerkeerView(discord.ui.View):
         def __init__(self, options, answer, ctx):
             super().__init__()
@@ -74,6 +95,7 @@ def run_discord_bot():
                     self.add_item(VerkeerButton(option, ctx))
                 except Exception as e:
                     print(e)
+            self.add_item(VolgendeButton("Next", ctx))
 
     @bot.hybrid_command(name="verkeersbord", description="leer verkeersborden")
     async def verkeersbord(ctx: commands.Context):
