@@ -55,23 +55,23 @@ def run_discord_bot():
         await ctx.send("succes!", view=MyView())
 
     class VerkeerButton(discord.ui.Button):
-        def __init__(self, option):
-            print(option)
+        def __init__(self, option, ctx):
+            self.ctx: commands.Context = ctx
             super().__init__(label=option, style=discord.ButtonStyle.primary)
 
-        async def callback(self, interaction: discord.Interaction):
+        async def callback(self, interaction):
             if self.label == self.view.answer:
                 await interaction.response.send_message("Goedzo")
             else:
-                await interaction.response.send_message("Kut kind, ga leren ofz")
+                await interaction.response.send_message(f"{self.ctx.author.mention} Kut kind, ga leren ofz...")
 
     class VerkeerView(discord.ui.View):
-        def __init__(self, options, answer):
+        def __init__(self, options, answer, ctx):
             super().__init__()
             self.answer = answer
             for option in options:
                 try:
-                    self.add_item(VerkeerButton(option))
+                    self.add_item(VerkeerButton(option, ctx))
                 except Exception as e:
                     print(e)
 
@@ -79,12 +79,13 @@ def run_discord_bot():
     async def verkeersbord(ctx: commands.Context):
         with open("verkeersborden.json", "r") as f:
             data = json.load(f)
-            question = data["my_list"][random.randint(0, 1)]
+            maxi = len(data["my_list"])
+            question = data["my_list"][random.randint(0, maxi)]
             print(question)
 
         picture = discord.File(question["img_path"])
         vraag = question["vraag"]
-        await ctx.send(file=picture, content=vraag, view=VerkeerView(options=question["options"], answer=question["answer"]))
+        await ctx.send(file=picture, content=vraag, view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx))
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.check(has_administrator_permission)

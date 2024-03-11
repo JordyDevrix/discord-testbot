@@ -21,6 +21,94 @@
         "Stoppen en voorrang verlenen aan het verkeer op de kruisende weg"
       ],
       "answer": "Moet je stoppen en voorrang verlenen aan het verkeer op de kruisende weg"
+    },
+    {
+      "naam": "C01",
+      "vraag": "bij dit bord mag je...",
+      "img_path": "verkeersborden/C01.png",
+      "options": [
+        "Alleen de tegen gestelde richting in",
+        "De straat van bijde kanten niet in",
+        "Mag je de straat alleen in voor eindbestemmingen"
+      ],
+      "answer": "De straat van bijde kanten niet in"
+    },
+    {
+      "naam": "C01",
+      "vraag": "Dit bord betekent...",
+      "img_path": "verkeersborden/C01.png",
+      "options": [
+        "Gesloten voor al het verkeer",
+        "Gesloten voor motorvoertuigen",
+        "Eenrichtingsweg, deze kant verboden in te rijden"
+      ],
+      "answer": "Gesloten voor al het verkeer"
+    },
+    {
+      "naam": "C02",
+      "vraag": "Dit bord betekent...",
+      "img_path": "verkeersborden/C02.png",
+      "options": [
+        "Gesloten voor al het verkeer",
+        "Gesloten voor motorvoertuigen",
+        "Eenrichtingsweg, deze kant verboden in te rijden"
+      ],
+      "answer": "Eenrichtingsweg, deze kant verboden in te rijden"
+    },
+    {
+      "naam": "C03",
+      "vraag": "Dit bord betekent...",
+      "img_path": "verkeersborden/C03.png",
+      "options": [
+        "Verplichte rijrichting rechtdoor",
+        "Eenrichtingsweg",
+        "Dak parkeerplaats"
+      ],
+      "answer": "Eenrichtingsweg"
+    },
+    {
+      "naam": "C03",
+      "vraag": "Mag je hier rijden?",
+      "img_path": "verkeersborden/C03.png",
+      "options": [
+        "Nee",
+        "Ja",
+        "Ja, alleen met bromfietsen",
+        "Dodehoek"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "C05",
+      "vraag": "Dit bord betekent...",
+      "img_path": "verkeersborden/C05.png",
+      "options": [
+        "Inrijden toegestaan",
+        "Straat met 2 baans weg"
+      ],
+      "answer": "Inrijden toegestaan"
+    },
+    {
+      "naam": "C05",
+      "vraag": "Mag je hier rijden?",
+      "img_path": "verkeersborden/C05.png",
+      "options": [
+        "Ja",
+        "Nee",
+        "Alleen met auto's minder dan 1,86m breed"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "C06",
+      "vraag": "Dit bord betekent...",
+      "img_path": "verkeersborden/C06.png",
+      "options": [
+        "Gesloten voor al het verkeer",
+        "Gesloten voor motorvoertuigen",
+        "Gesloten voor motorrijtuigen"
+      ],
+      "answer": "Gesloten voor motorvoertuigen"
     }
   ]
 }
