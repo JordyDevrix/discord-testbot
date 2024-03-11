@@ -3,7 +3,6 @@
     {
       "naam": "B01",
       "vraag": "dit bord betekent:",
-      "img_path": "verkeersborden/B01.png",
       "options": [
         "Eenrichtingsweg",
         "Voorrangsweg",
@@ -14,7 +13,6 @@
     {
       "naam": "B07",
       "vraag": "bij dit bord moet je...",
-      "img_path": "verkeersborden/B07.png",
       "options": [
         "Voorrang verlenen aan alle bestuurders op de kruisende weg",
         "Volledig stoppen",
@@ -25,7 +23,6 @@
     {
       "naam": "C01",
       "vraag": "bij dit bord mag je...",
-      "img_path": "verkeersborden/C01.png",
       "options": [
         "Alleen de tegen gestelde richting in",
         "De straat van bijde kanten niet in",
@@ -36,7 +33,6 @@
     {
       "naam": "C01",
       "vraag": "Dit bord betekent...",
-      "img_path": "verkeersborden/C01.png",
       "options": [
         "Gesloten voor al het verkeer",
         "Gesloten voor motorvoertuigen",
@@ -47,7 +43,6 @@
     {
       "naam": "C02",
       "vraag": "Dit bord betekent...",
-      "img_path": "verkeersborden/C02.png",
       "options": [
         "Gesloten voor al het verkeer",
         "Gesloten voor motorvoertuigen",
@@ -58,7 +53,6 @@
     {
       "naam": "C03",
       "vraag": "Dit bord betekent...",
-      "img_path": "verkeersborden/C03.png",
       "options": [
         "Verplichte rijrichting rechtdoor",
         "Eenrichtingsweg",
@@ -69,7 +63,6 @@
     {
       "naam": "C03",
       "vraag": "Mag je hier rijden?",
-      "img_path": "verkeersborden/C03.png",
       "options": [
         "Nee",
         "Ja",
@@ -81,7 +74,6 @@
     {
       "naam": "C05",
       "vraag": "Dit bord betekent...",
-      "img_path": "verkeersborden/C05.png",
       "options": [
         "Inrijden toegestaan",
         "Straat met 2 baans weg"
@@ -91,7 +83,6 @@
     {
       "naam": "C05",
       "vraag": "Mag je hier rijden?",
-      "img_path": "verkeersborden/C05.png",
       "options": [
         "Ja",
         "Nee",
@@ -102,13 +93,292 @@
     {
       "naam": "C06",
       "vraag": "Dit bord betekent...",
-      "img_path": "verkeersborden/C06.png",
       "options": [
         "Gesloten voor al het verkeer",
         "Gesloten voor motorvoertuigen",
         "Gesloten voor motorrijtuigen"
       ],
       "answer": "Gesloten voor motorvoertuigen"
+    },
+    {
+      "naam": "D01",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Rotonde"
+      ],
+      "answer": "Rotonde"
+    },
+    {
+      "naam": "D01",
+      "vraag": "Dit bord is een...",
+      "options": [
+        "Gebodsbord",
+        "Verbodsbord",
+        "Waarschuwingsbord"
+      ],
+      "answer": "Gebodsbord"
+    },
+    {
+      "naam": "D04",
+      "vraag": "Dit bord betekent..",
+      "options": [
+        "Eenrichtingsweg",
+        "Verplichte rijrichting rechtdoor",
+        "Omkeren verboden"
+      ],
+      "answer": "Verplichte rijrichting rechtdoor"
+    },
+    {
+      "naam": "D08",
+      "vraag": "Bij dit bord...",
+      "options": [
+        "Mag je niet keren",
+        "Moet je keren",
+        "Word je gewaarschuwd voor een U bocht"
+      ],
+      "answer": "Moet je keren"
+    },
+    {
+      "naam": "D08",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Omkeren verplicht",
+        "Omkeren verboden",
+        "U bocht aan einde van de straat"
+      ],
+      "answer": "Omkeren verplicht"
+    },
+    {
+      "naam": "D08",
+      "vraag": "Dit bord is een...",
+      "options": [
+        "Verbodsbord",
+        "Gebodsbord",
+        "Waarschuwingsbord",
+        "Informatiebord"
+      ],
+      "answer": "Gebodsbord"
+    },
+    {
+      "naam": "E01",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Stilstaan verbod",
+        "Parkeer verbod",
+        "Laden lossen verbod"
+      ],
+      "answer": "Parkeerverbod"
+    },
+    {
+      "naam": "E01",
+      "vraag": "Mag je hier laden & lossen?",
+      "options": [
+        "ja",
+        "nee"
+      ],
+      "answer": "ja"
+    },
+    {
+      "naam": "E02",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Parkeer verbod",
+        "Stilstaan verbod"
+      ],
+      "answer": "Stilstaan verbod"
+    },
+    {
+      "naam": "E02",
+      "vraag": "Mag je hier laden & lossen?",
+      "options": [
+        "ja",
+        "nee"
+      ],
+      "answer": "nee"
+    },
+    {
+      "naam": "E02",
+      "vraag": "Mag je hier stilstaan?",
+      "options": [
+        "ja",
+        "nee"
+      ],
+      "answer": "nee"
+    },
+    {
+      "naam": "F01",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Verboden voor motorvoertuigen in te halen",
+        "Inhalen toegestaan"
+      ],
+      "answer": "Verboden voor motorvoertuigen in te halen"
+    },
+    {
+      "naam": "F01",
+      "vraag": "Mag je hier inhalen?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "F03",
+      "vraag": "Mag je hier inhalen?",
+      "options": [
+        "Ja altijd",
+        "Ja met vrachtauto's",
+        "Ja met personen auto's",
+        "Nee"
+      ],
+      "answer": "Ja met personen auto's"
+    },
+    {
+      "naam": "F07",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Verboden te keren",
+        "Verboden niet te keren",
+        "Gebod tot keren"
+      ],
+      "answer": "Verboden te keren"
+    },
+    {
+      "naam": "F07",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Verboden te keren",
+        "Verboden niet te keren",
+        "Gebod tot keren"
+      ],
+      "answer": "Verboden te keren"
+    },
+    {
+      "naam": "F10",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Stoppen",
+        "Stoppen en voorrang verlenen",
+        "Niet inrijden, Eenrichtingsweg"
+      ],
+      "answer": "Stoppen"
+    },
+    {
+      "naam": "F10",
+      "vraag": "Wanneer mag je doorrijden?",
+      "options": [
+        "Als je gestopt bent",
+        "Als er geen verkeer meer is",
+        "Als het bord weg is"
+      ],
+      "answer": "Als het bord weg is"
+    },
+    {
+      "naam": "G01",
+      "vraag": "Dit bord betekent",
+      "options": [
+        "Autoweg",
+        "Niet auto weg",
+        "Autosnelweg"
+      ],
+      "answer": "Autosnelweg"
+    },
+    {
+      "naam": "G01",
+      "vraag": "Mag je hier rijden met een bromfiets?",
+      "options": [
+        "Ja",
+        "Nee",
+        "Alleen als hij minimaal 60 kan"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "G03",
+      "vraag": "Dit bord betekent",
+      "options": [
+        "Autoweg",
+        "Niet auto weg",
+        "Autosnelweg"
+      ],
+      "answer": "Autoweg"
+    },
+    {
+      "naam": "G03",
+      "vraag": "Mag je hier rijden met een bromfiets?",
+      "options": [
+        "Ja",
+        "Nee",
+        "Alleen als hij minimaal 60 kan"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "G05",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Woonerf",
+        "Straat",
+        "maximaal 15kmph"
+      ],
+      "answer": "Woonerf"
+    },
+    {
+      "naam": "G05",
+      "vraag": "Mag je hier rijden met een bromfiets?",
+      "options": [
+        "Ja",
+        "Nee",
+        "Alleen als hij maximaal 25 rijdt"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "G07",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Onverplicht voetpad",
+        "Verplicht voetpad"
+      ],
+      "answer": "Verplicht voetpad"
+    },
+    {
+      "naam": "G11",
+      "vraag": "Dit bord betekent...",
+      "options": [
+        "Onverplicht fietspad",
+        "Verplicht fietspad",
+        "verplicht bromfietspad"
+      ],
+      "answer": "Verplicht fietspad"
+    },
+    {
+      "naam": "G11",
+      "vraag": "Kan je hier snorfietsen verwachten",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "G12a",
+      "vraag": "Kan je hier snorfietsen verwachten",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "G12a",
+      "vraag": "Mag je hier fietsen",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
     }
   ]
 }

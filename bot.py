@@ -81,11 +81,12 @@ def run_discord_bot():
             data = json.load(f)
             maxi = len(data["my_list"])
             question = data["my_list"][random.randint(0, maxi)]
-            print(question)
+            print(maxi)
 
-        picture = discord.File(question["img_path"])
+        picture_name = question["naam"]
+        picture_path = discord.File(f"verkeersborden/{picture_name}.png")
         vraag = question["vraag"]
-        await ctx.send(file=picture, content=vraag, view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx))
+        await ctx.send(file=picture_path, content=vraag, view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx))
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.check(has_administrator_permission)
