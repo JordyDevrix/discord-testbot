@@ -1,0 +1,32 @@
+{
+  "my_list": [
+    {
+      "naam": "SIT01",
+      "vraag": "Wie mag eerst?",
+      "options": [
+        "De witte auto",
+        "De blauwe auto"
+      ],
+      "answer": "De blauwe auto"
+    },
+    {
+      "naam": "SIT02",
+      "vraag": "Wie mag eerst?",
+      "options": [
+        "De gele auto",
+        "De rode auto"
+      ],
+      "answer": "De rode auto"
+    },
+    {
+      "naam": "SIT03",
+      "vraag": "Wat is de juiste volgorde van voorrang",
+      "options": [
+        "Vrachtwagen - Motor - Gele auto",
+        "Motor - Gele auto - Vrachtwagen",
+        "Motor - Vrachtwagen - Gele auto"
+      ],
+      "answer": "Vrachtwagen - Motor - Gele auto"
+    }
+  ]
+}

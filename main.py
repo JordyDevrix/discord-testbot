@@ -1,7 +1,7 @@
 import bot
 
 
-def main():
+def main() -> None:
     bot.run_discord_bot()
 
 

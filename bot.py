@@ -1,14 +1,11 @@
-import json
 import time
-
+from lethal_functions import OpenNewQuestion
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions
 from discord import Interaction
 import random
 import datetime
-
-import lethal_functions
 
 
 def run_discord_bot():
@@ -61,9 +58,9 @@ def run_discord_bot():
 
         async def callback(self, interaction):
             if self.label == self.view.answer:
-                await interaction.response.send_message(f"Goedzo {self.ctx.author.mention}")
+                await interaction.response.send_message(f"Goedzo {interaction.user.mention}")
             else:
-                await interaction.response.send_message(f"{self.ctx.author.mention} Kut kind, ga leren ofz...")
+                await interaction.response.send_message(f"{interaction.user.mention} Kut kind, ga leren ofz...")
 
     class VolgendeButton(discord.ui.Button):
         def __init__(self, option, ctx):
@@ -71,25 +68,29 @@ def run_discord_bot():
             super().__init__(label=option, style=discord.ButtonStyle.green)
 
         async def callback(self, interaction):
-            with open("verkeersborden.json", "r") as f:
-                data = json.load(f)
-                maxi = len(data["my_list"])
-                question = data["my_list"][random.randint(0, maxi)]
-                print(maxi)
-
-            picture_name = question["naam"]
-            picture_path = discord.File(f"verkeersborden/{picture_name}.png")
+            if self.view.typ == "verkeersborden":
+                quest = OpenNewQuestion.get_new_bord()
+                question = quest[1]
+                picture_name = question["naam"]
+                picture_path = discord.File(f"{quest[0]}/{picture_name}.png")
+            else:
+                quest = OpenNewQuestion.get_new_situatie()
+                question = quest[1]
+                picture_name = question["naam"]
+                picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg")
             vraag = question["vraag"]
             await interaction.response.send_message(file=picture_path,
                                                     content=vraag,
                                                     view=VerkeerView(options=question["options"],
                                                                      answer=question["answer"],
-                                                                     ctx=self.ctx))
+                                                                     ctx=self.ctx,
+                                                                     typ=quest[0]))
 
     class VerkeerView(discord.ui.View):
-        def __init__(self, options, answer, ctx):
+        def __init__(self, options, answer, ctx, typ):
             super().__init__()
             self.answer = answer
+            self.typ = typ
             for option in options:
                 try:
                     self.add_item(VerkeerButton(option, ctx))
@@ -97,18 +98,26 @@ def run_discord_bot():
                     print(e)
             self.add_item(VolgendeButton("Next", ctx))
 
-    @bot.hybrid_command(name="verkeersbord", description="leer verkeersborden")
-    async def verkeersbord(ctx: commands.Context):
-        with open("verkeersborden.json", "r") as f:
-            data = json.load(f)
-            maxi = len(data["my_list"])
-            question = data["my_list"][random.randint(0, maxi)]
-            print(maxi)
-
+    @bot.hybrid_command(name="leerborden", description="leer verkeersborden")
+    async def leerborden(ctx: commands.Context):
+        quest = OpenNewQuestion.get_new_bord()
+        question = quest[1]
         picture_name = question["naam"]
-        picture_path = discord.File(f"verkeersborden/{picture_name}.png")
+        picture_path = discord.File(f"{quest[0]}/{picture_name}.png")
         vraag = question["vraag"]
-        await ctx.send(file=picture_path, content=vraag, view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx))
+        await ctx.send(file=picture_path, content=vraag,
+                       view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0]))
+
+    @bot.hybrid_command(name="leersituaties", description="leer verkeerssituaties")
+    async def leersituaties(ctx: commands.Context):
+        quest = OpenNewQuestion.get_new_situatie()
+        question = quest[1]
+        picture_name = question["naam"]
+        print(picture_name)
+        picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg")
+        vraag = question["vraag"]
+        await ctx.send(file=picture_path, content=vraag,
+                       view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0]))
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.check(has_administrator_permission)
