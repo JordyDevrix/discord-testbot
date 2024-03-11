@@ -27,6 +27,64 @@
         "Motor - Vrachtwagen - Gele auto"
       ],
       "answer": "Vrachtwagen - Motor - Gele auto"
+    },
+    {
+      "naam": "SIT04",
+      "vraag": "Moet de zwarte auto jou voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT05",
+      "vraag": "Mag je hier doorrijden zonder stoppen als er niemand aan komt",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT06",
+      "vraag": "Moet je de bromfiets voor laten gaan",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT07",
+      "vraag": "Wat is de juiste volgorde van voorrang",
+      "options": [
+        "Tram - Voetganger - Auto",
+        "Tram - Auto - Voetganger",
+        "Voetganger - Auto - Tram"
+      ],
+      "answer": "Tram - Voetganger - Auto"
+    },
+    {
+      "naam": "SIT08",
+      "vraag": "Stel je bent je rijbewijs kwijt, mag je nu naar het gemeentehuis rijden voor een nieuwe?",
+      "options": [
+        "Ja, alleen rechtstreeks naar het gemeente huis",
+        "Ja, je mag 1 week zonder rijbewijs rijden",
+        "Ja, zolang er een begeleider meerijd boven de 18",
+        "Nee, dat mag niet"
+      ],
+      "answer": "Nee, dat mag niet"
+    },
+    {
+      "naam": "SIT09",
+      "vraag": "Mag je hier linksaf slaan",
+      "options": [
+        "Nee, je moet rechtsaf",
+        "Nee, dat is een eenrichtingsweg",
+        "Ja, je mag afslaan"
+      ],
+      "answer": "Nee, dat mag niet"
     }
   ]
 }
