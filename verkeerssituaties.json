@@ -2,7 +2,7 @@
   "my_list": [
     {
       "naam": "SIT01",
-      "vraag": "Wie mag eerst? `SIT01`",
+      "vraag": "Wie mag eerst?",
       "options": [
         "De witte auto",
         "De blauwe auto"
@@ -11,7 +11,7 @@
     },
     {
       "naam": "SIT02",
-      "vraag": "Wie mag eerst? `SIT02`",
+      "vraag": "Wie mag eerst?",
       "options": [
         "De gele auto",
         "De rode auto"
@@ -20,7 +20,7 @@
     },
     {
       "naam": "SIT03",
-      "vraag": "Wat is de juiste volgorde van voorrang `SIT03`",
+      "vraag": "Wat is de juiste volgorde van voorrang",
       "options": [
         "Vrachtwagen - Motor - Gele auto",
         "Motor - Gele auto - Vrachtwagen",
@@ -30,7 +30,7 @@
     },
     {
       "naam": "SIT04",
-      "vraag": "Moet de zwarte auto jou voor laten gaan? `SIT04`",
+      "vraag": "Moet de zwarte auto jou voor laten gaan?",
       "options": [
         "Ja",
         "Nee"
@@ -39,7 +39,7 @@
     },
     {
       "naam": "SIT05",
-      "vraag": "Mag je hier doorrijden zonder stoppen als er niemand aan komt `SIT05`",
+      "vraag": "Mag je hier doorrijden zonder stoppen als er niemand aan komt",
       "options": [
         "Ja",
         "Nee"
@@ -48,7 +48,7 @@
     },
     {
       "naam": "SIT06",
-      "vraag": "Moet je de bromfiets voor laten gaan `SIT06`",
+      "vraag": "Moet je de bromfiets voor laten gaan",
       "options": [
         "Ja",
         "Nee"
@@ -57,7 +57,7 @@
     },
     {
       "naam": "SIT07",
-      "vraag": "Wat is de juiste volgorde van voorrang `SIT07`",
+      "vraag": "Wat is de juiste volgorde van voorrang",
       "options": [
         "Tram - Voetganger - Auto",
         "Tram - Auto - Voetganger",
@@ -67,7 +67,7 @@
     },
     {
       "naam": "SIT08",
-      "vraag": "Stel je bent je rijbewijs kwijt, mag je nu naar het gemeentehuis rijden voor een nieuwe? `SIT08`",
+      "vraag": "Stel je bent je rijbewijs kwijt, mag je nu naar het gemeentehuis rijden voor een nieuwe?",
       "options": [
         "Ja, alleen rechtstreeks naar het gemeente huis",
         "Ja, je mag 1 week zonder rijbewijs rijden",
@@ -78,13 +78,298 @@
     },
     {
       "naam": "SIT09",
-      "vraag": "Mag je hier linksaf slaan `SIT09`",
+      "vraag": "Mag je hier linksaf slaan",
       "options": [
         "Nee, je moet rechtsaf",
         "Nee, dat is een eenrichtingsweg",
         "Ja, je mag afslaan"
       ],
       "answer": "Ja, je mag afslaan"
+    },
+    {
+      "naam": "SIT10",
+      "vraag": "Een busje rijdt achteruit de rijbaan op. Welk gedrag vertoon je?",
+      "options": [
+        "Ik gebruik de claxon",
+        "Ik geef extra snel de bus voorbij",
+        "Ik stop en laat de bestuurder voorgaan"
+      ],
+      "answer": "Ik stop en laat de bestuurder voorgaan"
+    },
+    {
+      "naam": "SIT11",
+      "vraag": "Waar staat EMA voor?",
+      "options": [
+        "Educatieve Maatregel Alcohol",
+        "Educatieve Maatregel Autorijden",
+        "Eerste Maatregel Alcohol"
+      ],
+      "answer": "Educatieve Maatregel Alcohol"
+    },
+    {
+      "naam": "SIT12",
+      "vraag": "Je weigert mee te werken aan een blaas test. Kan je nu een strafpunt op je rijbewijs krijgen?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT12",
+      "vraag": "Je hebt 12 grandcafe biertjes op, hoelang moet je wachten tot je weer mag rijden?",
+      "options": [
+        "6 uur",
+        "12 uur",
+        "18 uur",
+        "24 uur"
+      ],
+      "answer": "18 uur"
+    },
+    {
+      "naam": "SIT12",
+      "vraag": "Je hebt 12 grandcafe biertjes op, hoelang moet je wachten tot je weer mag rijden?",
+      "options": [
+        "6 uur",
+        "12 uur",
+        "18 uur",
+        "24 uur"
+      ],
+      "answer": "18 uur"
+    },
+    {
+      "naam": "SIT13",
+      "vraag": "Je hebt 12 grandcafe biertjes op, hoelang moet je wachten tot je weer mag rijden?",
+      "options": [
+        "6 uur",
+        "12 uur",
+        "18 uur",
+        "24 uur"
+      ],
+      "answer": "18 uur"
+    },
+    {
+      "naam": "SIT13",
+      "vraag": "Hoeveel promille alcohol mag een beginnend bestuurder hebben",
+      "options": [
+        "0,1",
+        "0,2",
+        "0,5"
+      ],
+      "answer": "0,2"
+    },
+    {
+      "naam": "SIT14",
+      "vraag": "Wat is de maximale tijd van een rijverbod?",
+      "options": [
+        "24 uur",
+        "30 uur",
+        "1 week",
+        "Er is geen maximum"
+      ],
+      "answer": "24 uur"
+    },
+    {
+      "naam": "SIT15",
+      "vraag": "Je banden hebben een profieldiepte van 2mm. Is dit een goede profieldiepte?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT15",
+      "vraag": "Je banden hebben een profieldiepte van 1.4mm. Is dit een goede profieldiepte?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT16",
+      "vraag": "Moet je de voetganger op de brug voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT17",
+      "vraag": "Je wilt rechtdoor. Moet je de voetganger voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT17",
+      "vraag": "Je wilt rechtsaf. Moet je de voetganger voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT18",
+      "vraag": "Moet je de voetganger voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT19",
+      "vraag": "Je wilt rechtdoor. Moet je de voetganger voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT20",
+      "vraag": "Mag je overdag dimlicht voeren?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT21",
+      "vraag": "Is de voorrang bij dit bord altijd geregeld?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT22",
+      "vraag": "Je neemt de rotonde voor driekwart. Ben je verplicht richting aan te geven naar links?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT23",
+      "vraag": "Je neemt de tweede afslag op de rotonde. Waar geef je richting aan?",
+      "options": [
+        "A",
+        "B",
+        "C"
+      ],
+      "answer": "B"
+    },
+    {
+      "naam": "SIT24",
+      "vraag": "Mag je op rotondes rechts inhalen?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT25",
+      "vraag": "Hoe zie je wanneer een blinde weggebruiker de weg over wilt steken?",
+      "options": [
+        "De stok wijst recht naar voren",
+        "De stok wijst recht omlaag",
+        "De blinde weggebruiker steek zijn hand uit"
+      ],
+      "answer": "De stok wijst recht naar voren"
+    },
+    {
+      "naam": "SIT26",
+      "vraag": "Wie mag eerst?",
+      "options": [
+        "De auto",
+        "De colonne"
+      ],
+      "answer": "De colonne"
+    },
+    {
+      "naam": "SIT27",
+      "vraag": "Jij wilt rechtdoor. Moet je de grijze auto voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT28",
+      "vraag": "Je slaat rechts af. Moet je de voetganger voor laten gaan?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT29",
+      "vraag": "Wie mag eerst?",
+      "options": [
+        "De auto",
+        "De fietskar",
+        "De tram"
+      ],
+      "answer": "De fietskar"
+    },
+    {
+      "naam": "SIT30",
+      "vraag": "Je slaat hier rechtsaf. Moet je rekening houden met tegenliggers?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT31",
+      "vraag": "Kan je hier tegenliggers verwachten?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT32",
+      "vraag": "Je rijd deze straat in. Moet je rekening houden met tegenliggers?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT33",
+      "vraag": "Wat betekent dit?",
+      "options": [
+        "Einde advies snelheid",
+        "Einde vooraf ingestelde maximum snelheid",
+        "Einde vooraf ingestelde verboden"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT34",
+      "vraag": "Mag je het koelvloeistofniveau controleren met een warme motor?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
     }
   ]
 }

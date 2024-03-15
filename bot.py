@@ -116,7 +116,7 @@ def run_discord_bot():
         print(picture_name)
         picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg")
         vraag = question["vraag"]
-        await ctx.send(file=picture_path, content=vraag,
+        await ctx.send(file=picture_path, content=f"{vraag} | `{picture_name}`",
                        view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0]))
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
