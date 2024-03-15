@@ -370,6 +370,25 @@
         "Nee"
       ],
       "answer": "Nee"
+    },
+    {
+      "naam": "SIT35",
+      "vraag": "Je wilt links afslaan en de bestelauto wil rechts afslaan. Mag je nu het kruispunt oprijden?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT36",
+      "vraag": "Het verbod stil te staan, geldt hier:",
+      "options": [
+        "Aan de linkerzijde van de rijbaan",
+        "Aan de rechterzijde van de rijbaan",
+        "Aan geen enkele zijde"
+      ],
+      "answer": "Aan geen enkele zijde"
     }
   ]
 }
