@@ -80,7 +80,7 @@ def run_discord_bot():
                 picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg")
             vraag = question["vraag"]
             await interaction.response.send_message(file=picture_path,
-                                                    content=vraag,
+                                                    content=f"{vraag} | `{picture_name}`",
                                                     view=VerkeerView(options=question["options"],
                                                                      answer=question["answer"],
                                                                      ctx=self.ctx,
@@ -105,7 +105,7 @@ def run_discord_bot():
         picture_name = question["naam"]
         picture_path = discord.File(f"{quest[0]}/{picture_name}.png")
         vraag = question["vraag"]
-        await ctx.send(file=picture_path, content=vraag,
+        await ctx.send(file=picture_path, content=f"{vraag} | `{picture_name}`",
                        view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0]))
 
     @bot.hybrid_command(name="leersituaties", description="leer verkeerssituaties")
