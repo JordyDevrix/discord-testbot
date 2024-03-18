@@ -58,7 +58,7 @@ def run_discord_bot():
         response: dict = request.get("data").get("channel").get("playingnow").get("current").get("metadata")
         if response.get("artist") == "Commercial":
             print(response)
-            await ctx.send(f"Er speelt momenteel geen muziek: {response.get('artist')}")
+            await ctx.send(f"Er speelt momenteel geen muziek: **{response.get('artist')}**")
         else:
             await ctx.send(f"Muziek op jumbo radio: **{response.get('artist')} - {response.get('title')}**")
 
