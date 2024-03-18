@@ -4,6 +4,6 @@ LABEL authors="2109j"
 
 ADD . .
 
-RUN pip install discord
+RUN pip install discord requests
 
 CMD [ "python", "./main.py" ]
