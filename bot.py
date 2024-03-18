@@ -6,6 +6,7 @@ from discord.ext.commands import has_permissions
 from discord import Interaction
 import random
 import datetime
+import jumboreq
 
 
 def run_discord_bot():
@@ -50,6 +51,16 @@ def run_discord_bot():
     async def test(ctx: commands.Context):
         print(ctx)
         await ctx.send("succes!", view=MyView())
+
+    @bot.hybrid_command(name="jumboradio", description="gives the current song playing on jumboradio")
+    async def get_jumbo_radio(ctx: commands.Context):
+        request: dict = jumboreq.get_jumbo_music()
+        response: dict = request.get("data").get("channel").get("playingnow").get("current").get("metadata")
+        if response.get("artist") == "Commercial":
+            print(response)
+            await ctx.send(f"Er speelt momenteel geen muziek: {response.get('artist')}")
+        else:
+            await ctx.send(f"Muziek op jumbo radio: **{response.get('artist')} - {response.get('title')}**")
 
     class VerkeerButton(discord.ui.Button):
         def __init__(self, option, ctx):
@@ -199,17 +210,10 @@ def run_discord_bot():
         # print("10 seconds passed")
         await bot.change_presence(activity=discord.Activity(
             type=discord.ActivityType.watching,
-            name=random.choice(["hoe elio mijn spullen steelt",
-                                "hoe stefan kinderen verzameld",
-                                "bas requirement engineering uitleggen",
-                                "videocolleges",
-                                "hoe ronald huilt als je een uurtje eerder weggaat",
-                                "hoe michiel maurice bedreigd",
-                                "kevin's hairline recede",
-                                "jordy's dad getting milk"
-                                ]),
-            details="Elio steelt weereens mijn spullen -_-",
-            description="Elio steelt weereens mijn spullen -_-"
+            name=random.choice(["laatste aanbiedingen",
+                                "de jumbo discord",
+                                "de radio DJ's"
+                                ])
         )
         )
 
