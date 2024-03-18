@@ -49,7 +49,7 @@ def run_discord_bot():
             request: dict = jumboreq.get_jumbo_music()
             response: dict = request.get("data").get("channel").get("playingnow").get("current").get("metadata")
             await ctx.send(
-                f"Playing **{response.get('artist')}**"
+                f"Playing **{response.get('artist')} - {response.get('title')}**"
             )
         except Exception as e:
             await ctx.send("**Er is niemand aanwezig in een voicechannel**")
@@ -256,8 +256,6 @@ def run_discord_bot():
                                 await guild.voice_client.disconnect(force=True)
                     except Exception as e:
                         print(f"{e}\nbot not connected to any channel")
-
-
 
         # print("10 seconds passed")
         await bot.change_presence(activity=discord.Activity(
