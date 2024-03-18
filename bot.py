@@ -1,3 +1,4 @@
+import asyncio
 import time
 from lethal_functions import OpenNewQuestion
 import discord
@@ -7,6 +8,7 @@ from discord import Interaction
 import random
 import datetime
 import jumboreq
+from discord import FFmpegPCMAudio
 
 
 def run_discord_bot():
@@ -21,6 +23,37 @@ def run_discord_bot():
     @bot.hybrid_command()
     async def ping(ctx: commands.Context):
         await ctx.send("pong")
+
+    @bot.hybrid_command(name="stopradio", description="stop music")
+    async def ping(ctx: commands.Context):
+        try:
+            print(ctx.guild.voice_client.channel)
+            await ctx.guild.voice_client.disconnect(force=True)
+            await ctx.send("**Voice channel verlaten**")
+        except Exception as e:
+            print(e)
+            await ctx.send("**Bot is niet aanwezig in een voice channel**")
+
+    @bot.hybrid_command(name="playradio", description="play music")
+    async def play_jumbo_radio(ctx: commands.Context):
+        try:
+            channel = ctx.author.voice.channel
+            voice_client = await channel.connect()
+            voice_client.play(FFmpegPCMAudio(
+                executable="ffmpeg-2024-03-18-git-a32f75d6e2-essentials_build/bin/ffmpeg.exe",
+                source="https://playerservices.streamtheworld.com/api/livestream-redirect/JUMBORADIOAAC.aac"
+            ))
+            await channel.guild.me.edit(deafen=True)
+            await channel.guild.me.edit(mute=False)
+
+            request: dict = jumboreq.get_jumbo_music()
+            response: dict = request.get("data").get("channel").get("playingnow").get("current").get("metadata")
+            await ctx.send(
+                f"Playing **{response.get('artist')}**"
+            )
+        except Exception as e:
+            await ctx.send("**Er is niemand aanwezig in een voicechannel**")
+            print(e)
 
     @bot.hybrid_command()
     async def dm(ctx: commands.Context):
@@ -207,6 +240,25 @@ def run_discord_bot():
 
     @tasks.loop(seconds=10)
     async def change_status():
+        for guild in bot.guilds:
+            for channel in guild.voice_channels:
+                if len(channel.members) == 1:
+                    try:
+                        for member in channel.members:
+                            if str(member.id) == "1214671466780565575":
+                                print(len(channel.members),
+                                      "in",
+                                      guild.name,
+                                      "bot connected to",
+                                      guild.voice_client.channel,
+                                      channel.members
+                                      )
+                                await guild.voice_client.disconnect(force=True)
+                    except Exception as e:
+                        print(f"{e}\nbot not connected to any channel")
+
+
+
         # print("10 seconds passed")
         await bot.change_presence(activity=discord.Activity(
             type=discord.ActivityType.watching,
