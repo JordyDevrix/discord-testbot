@@ -62,7 +62,7 @@ def run_discord_bot():
             await ctx.send("**Er is niemand aanwezig in een voicechannel**")
             with open("log.txt", "a") as file:
                 print(e)
-                file.writelines(f"{e}\n")
+                await ctx.send(f"{e}")
 
     @bot.hybrid_command()
     async def dm(ctx: commands.Context):
