@@ -1,4 +1,7 @@
+import platform
+
 import vlc
+import os
 import time
 
 url = 'https://playerservices.streamtheworld.com/api/livestream-redirect/JUMBORADIOAAC.aac'
@@ -19,7 +22,7 @@ player.set_media(media)
 player.play()
 
 while True:
-    print("playing music")
+    print(platform.system())
     i = input("x to quit")
     if i == "x":
         player.stop()
