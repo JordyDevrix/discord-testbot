@@ -40,7 +40,7 @@ def run_discord_bot():
         try:
             channel = ctx.author.voice.channel
             voice_client = await channel.connect()
-            if platform.system() == "Linux":
+            if platform.system() == "Windows":
                 voice_client.play(FFmpegPCMAudio(
                     executable="ffmpeg-2024-03-18-git-a32f75d6e2-essentials_build/bin/ffmpeg.exe",
                     source="https://playerservices.streamtheworld.com/api/livestream-redirect/JUMBORADIOAAC.aac"
