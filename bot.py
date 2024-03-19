@@ -26,7 +26,7 @@ def run_discord_bot():
         await ctx.send("pong")
 
     @bot.hybrid_command(name="stopradio", description="stop music")
-    async def ping(ctx: commands.Context):
+    async def stop_jumbo_radio(ctx: commands.Context):
         try:
             print(ctx.guild.voice_client.channel)
             await ctx.guild.voice_client.disconnect(force=True)
