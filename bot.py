@@ -70,30 +70,6 @@ def run_discord_bot():
         await ctx.author.send(choose)
         await ctx.send("watch yo dm's")
 
-    class MyView(discord.ui.View):  # Create a class called MyView that subclasses discord.ui.View
-        @discord.ui.button(label="Let's play a game :D", style=discord.ButtonStyle.primary)
-        async def button1_callback(self, interaction, button):
-            print(interaction)
-            button.disabled = True  # set button.disabled to True to disable the button
-            button.label = "STOP!"  # change the button's label to something else
-            # await interaction.response.send_message("STOP! I DON'T LIKE THIS GAME!")
-            await interaction.response.edit_message(view=self)
-            await interaction.followup.send("STOP! I DON'T LIKE THIS GAME!")
-
-        @discord.ui.button(label="Let's play a game too :D", style=discord.ButtonStyle.primary)
-        async def button2_callback(self, interaction, button):
-            print(interaction)
-            button.disabled = True  # set button.disabled to True to disable the button
-            button.label = "STOP!"  # change the button's label to something else
-            # await interaction.response.send_message("STOP! I DON'T LIKE THIS GAME!")
-            await interaction.response.edit_message(view=self)
-            await interaction.followup.send("STOP! I DON'T LIKE THIS GAME!")
-
-    @bot.hybrid_command(name="test", description="testing a discord bot")
-    async def test(ctx: commands.Context):
-        print(ctx)
-        await ctx.send("succes!", view=MyView())
-
     @bot.hybrid_command(name="jumboradio", description="gives the current song playing on jumboradio")
     async def get_jumbo_radio(ctx: commands.Context):
         request: dict = jumboreq.get_jumbo_music()
