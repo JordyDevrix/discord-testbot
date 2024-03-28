@@ -58,6 +58,11 @@ def run_discord_bot():
             await ctx.send(
                 f"Playing **{response.get('artist')} - {response.get('title')}**"
             )
+        except AttributeError as e:
+            if e.name is "channel":
+                await ctx.send(f"**Join eerst een Voice Channel om muziek af te spelen**")
+            else:
+                await ctx.send(f"**Het is niet mogelijk om in DM muziek af te spelen**")
         except Exception as e:
             await ctx.send("**Er is niemand aanwezig in een voicechannel**")
             with open("log.txt", "a") as file:
