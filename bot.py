@@ -55,9 +55,11 @@ def run_discord_bot():
 
             request: dict = jumboreq.get_jumbo_music()
             response: dict = request.get("data").get("channel").get("playingnow").get("current").get("metadata")
-            await ctx.send(
-                f"Playing **{response.get('artist')} - {response.get('title')}**"
-            )
+            if response.get("artist") == "Commercial":
+                print(response)
+                await ctx.send(f"Playing **{response.get('artist')}**")
+            else:
+                await ctx.send(f"Playing **{response.get('artist')} - {response.get('title')}**")
         except AttributeError as e:
             if e.name is "channel":
                 await ctx.send(f"**Join eerst een Voice Channel om muziek af te spelen**")
