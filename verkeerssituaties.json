@@ -458,6 +458,15 @@
         "Belastingontduiking"
       ],
       "answer": "Zware overtreding"
+    },
+    {
+      "naam": "SIT43",
+      "vraag": "Mag je hier landbouw voertuigen inhalen?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
     }
   ]
 }
