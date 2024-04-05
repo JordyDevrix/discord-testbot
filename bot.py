@@ -108,13 +108,16 @@ def run_discord_bot():
                 question = quest[1]
                 picture_name = question["naam"]
                 picture_path = discord.File(f"{quest[0]}/{picture_name}.png", filename="output.png")
+                titler = "Borden"
             else:
                 quest = OpenNewQuestion.get_new_situatie()
                 question = quest[1]
                 picture_name = question["naam"]
                 picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg", filename="output.png")
+                titler = "Situaties"
+
             vraag = question["vraag"]
-            embed = discord.Embed(title="Situatie", color=discord.Color(int('ffc800', 16)))
+            embed = discord.Embed(title=titler, color=discord.Color(int('ffc800', 16)))
             embed.add_field(name=f"{vraag} | `{picture_name}`", value="click op het juiste antwoord", inline=True)
             embed.set_image(url=f"attachment://output.png")
             await interaction.response.send_message(
@@ -145,7 +148,7 @@ def run_discord_bot():
         picture_name = question["naam"]
         picture_path = discord.File(f"{quest[0]}/{picture_name}.png", filename="output.png")
         vraag = question["vraag"]
-        embed = discord.Embed(title="Situatie", color=discord.Color(int('ffc800', 16)))
+        embed = discord.Embed(title="Borden", color=discord.Color(int('ffc800', 16)))
         embed.add_field(name=f"{vraag} | `{picture_name}`", value="click op het juiste antwoord", inline=True)
         embed.set_image(url=f"attachment://output.png")
         await ctx.send(
@@ -162,7 +165,7 @@ def run_discord_bot():
         picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg", filename="output.png")
         vraag = question["vraag"]
 
-        embed = discord.Embed(title="Situatie", color=discord.Color(int('ffc800', 16)))
+        embed = discord.Embed(title="Situaties", color=discord.Color(int('ffc800', 16)))
         embed.add_field(name=f"{vraag} | `{picture_name}`", value="click op het juiste antwoord", inline=True)
         embed.set_image(url=f"attachment://output.png")
         await ctx.send(
