@@ -170,6 +170,24 @@
       "answer": "24 uur"
     },
     {
+      "naam": "SIT14",
+      "vraag": "Je besluit toch te fietsen tijdens een rijontzegging. Ben je nu strafbaar?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT14",
+      "vraag": "Je besluit toch te fietsen tijdens een rijverbod. Ben je nu strafbaar?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
       "naam": "SIT15",
       "vraag": "Je banden hebben een profieldiepte van 2mm. Is dit een goede profieldiepte?",
       "options": [
@@ -186,6 +204,17 @@
         "Nee"
       ],
       "answer": "Nee"
+    },
+    {
+      "naam": "SIT15",
+      "vraag": "Wat is de minimale profieldiepte van een band",
+      "options": [
+        "1.4mm",
+        "1.6mm",
+        "1.8mm",
+        "2.0mm"
+      ],
+      "answer": "1.6"
     },
     {
       "naam": "SIT16",
@@ -462,6 +491,58 @@
     {
       "naam": "SIT43",
       "vraag": "Mag je hier landbouw voertuigen inhalen?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT44",
+      "vraag": "Je rijd overdag op een autosnelweg met een dakkoffer. Hoe hard mag je in principe rijden",
+      "options": [
+        "80",
+        "90",
+        "100",
+        "130"
+      ],
+      "answer": "100"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Welke verkeersregels volgen sleep auto's?",
+      "options": [
+        "Normale verkeersregels",
+        "Aanhanger regels",
+        "Speciaal vervoer regels"
+      ],
+      "answer": "Aanhanger regels"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Wat is de minimale lengte voor een sleeptouw",
+      "options": [
+        "1 meter",
+        "2 meter",
+        "5 meter",
+        "Er is geen minimale lengte"
+      ],
+      "answer": "Er is geen minimale lengte"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Wat is de maximale lengte voor een sleeptouw",
+      "options": [
+        "1 meter",
+        "2 meter",
+        "5 meter",
+        "Er is geen minimale lengte"
+      ],
+      "answer": "5"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Mag je met een sleeptouw een motor trekken?",
       "options": [
         "Ja",
         "Nee"
