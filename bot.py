@@ -120,7 +120,6 @@ def run_discord_bot():
             await interaction.response.send_message(
                 embed=embed,
                 file=picture_path,
-                content=f"{vraag} | `{picture_name}`",
                 view=VerkeerView(options=question["options"],
                                  answer=question["answer"],
                                  ctx=self.ctx,
