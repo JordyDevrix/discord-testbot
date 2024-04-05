@@ -61,15 +61,14 @@ def run_discord_bot():
             else:
                 await ctx.send(f"Playing **{response.get('artist')} - {response.get('title')}**")
         except AttributeError as e:
-            if e.name is "channel":
+            if e.name == "channel":
                 await ctx.send(f"**Join eerst een Voice Channel om muziek af te spelen**")
             else:
                 await ctx.send(f"**Het is niet mogelijk om in DM muziek af te spelen**")
         except Exception as e:
             await ctx.send("**Er is niemand aanwezig in een voicechannel**")
-            with open("log.txt", "a") as file:
-                print(e)
-                await ctx.send(f"{e}")
+            print(e)
+            await ctx.send(f"{e}")
 
     @bot.hybrid_command()
     async def dm(ctx: commands.Context):
@@ -108,19 +107,25 @@ def run_discord_bot():
                 quest = OpenNewQuestion.get_new_bord()
                 question = quest[1]
                 picture_name = question["naam"]
-                picture_path = discord.File(f"{quest[0]}/{picture_name}.png")
+                picture_path = discord.File(f"{quest[0]}/{picture_name}.png", filename="output.png")
             else:
                 quest = OpenNewQuestion.get_new_situatie()
                 question = quest[1]
                 picture_name = question["naam"]
-                picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg")
+                picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg", filename="output.png")
             vraag = question["vraag"]
-            await interaction.response.send_message(file=picture_path,
-                                                    content=f"{vraag} | `{picture_name}`",
-                                                    view=VerkeerView(options=question["options"],
-                                                                     answer=question["answer"],
-                                                                     ctx=self.ctx,
-                                                                     typ=quest[0]))
+            embed = discord.Embed(title="Situatie", color=discord.Color(int('ffc800', 16)))
+            embed.add_field(name=f"{vraag} | `{picture_name}`", value="click op het juiste antwoord", inline=True)
+            embed.set_image(url=f"attachment://output.png")
+            await interaction.response.send_message(
+                embed=embed,
+                file=picture_path,
+                content=f"{vraag} | `{picture_name}`",
+                view=VerkeerView(options=question["options"],
+                                 answer=question["answer"],
+                                 ctx=self.ctx,
+                                 typ=quest[0])
+            )
 
     class VerkeerView(discord.ui.View):
         def __init__(self, options, answer, ctx, typ):
@@ -139,21 +144,34 @@ def run_discord_bot():
         quest = OpenNewQuestion.get_new_bord()
         question = quest[1]
         picture_name = question["naam"]
-        picture_path = discord.File(f"{quest[0]}/{picture_name}.png")
+        picture_path = discord.File(f"{quest[0]}/{picture_name}.png", filename="output.png")
         vraag = question["vraag"]
-        await ctx.send(file=picture_path, content=f"{vraag} | `{picture_name}`",
-                       view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0]))
-
+        embed = discord.Embed(title="Situatie", color=discord.Color(int('ffc800', 16)))
+        embed.add_field(name=f"{vraag} | `{picture_name}`", value="click op het juiste antwoord", inline=True)
+        embed.set_image(url=f"attachment://output.png")
+        await ctx.send(
+            embed=embed,
+            file=picture_path,
+            view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
+        )
     @bot.hybrid_command(name="leersituaties", description="leer verkeerssituaties")
     async def leersituaties(ctx: commands.Context):
         quest = OpenNewQuestion.get_new_situatie()
         question = quest[1]
         picture_name = question["naam"]
         print(picture_name)
-        picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg")
+        picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg", filename="output.png")
         vraag = question["vraag"]
-        await ctx.send(file=picture_path, content=f"{vraag} | `{picture_name}`",
-                       view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0]))
+
+        embed = discord.Embed(title="Situatie", color=discord.Color(int('ffc800', 16)))
+        embed.add_field(name=f"{vraag} | `{picture_name}`", value="click op het juiste antwoord", inline=True)
+        embed.set_image(url=f"attachment://output.png")
+        await ctx.send(
+            embed=embed,
+            file=picture_path,
+            view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
+        )
+
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.check(has_administrator_permission)
