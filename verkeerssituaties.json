@@ -536,7 +536,7 @@
         "1 meter",
         "2 meter",
         "5 meter",
-        "Er is geen minimale lengte"
+        "Er is geen maximale lengte"
       ],
       "answer": "5"
     },
