@@ -24,11 +24,17 @@ def run_discord_bot():
     bot = commands.Bot(command_prefix=",", intents=discord.Intents.all())
 
     @bot.hybrid_command()
-    async def ping(ctx: commands.Context):
-        await ctx.send("pong")
+    async def ping(ctx: commands.Context, my_channel):
+        if ctx.guild is None:
+            await ctx.send("this is dm")
+        else:
+            for channel in ctx.guild.channels:
+                if str(channel.id) in str(my_channel):
+                    print(channel.id, my_channel)
+                    await ctx.send(f"Channel: <#{channel.id}> set for bot announcements")
 
     @bot.hybrid_command(name="stopradio", description="stop music")
-    async def ping(ctx: commands.Context):
+    async def stop_jumbo_radio(ctx: commands.Context):
         try:
             print(ctx.guild.voice_client.channel)
             await ctx.guild.voice_client.disconnect(force=True)
@@ -83,7 +89,7 @@ def run_discord_bot():
         else:
             await ctx.send(f"Muziek op jumbo radio: **{response.get('artist')} - {response.get('title')}**")
 
-# CBR verkeersvragen #
+    # CBR verkeersvragen #
 
     @bot.hybrid_command(name="leerborden", description="leer verkeersborden")
     async def leerborden(ctx: commands.Context):
@@ -98,8 +104,10 @@ def run_discord_bot():
         await ctx.send(
             embed=embed,
             file=picture_path,
-            view=verkeersopgaven.VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
+            view=verkeersopgaven.VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx,
+                                             typ=quest[0])
         )
+
     @bot.hybrid_command(name="leersituaties", description="leer verkeerssituaties")
     async def leersituaties(ctx: commands.Context):
         quest = OpenNewQuestion.get_new_situatie()
@@ -115,10 +123,11 @@ def run_discord_bot():
         await ctx.send(
             embed=embed,
             file=picture_path,
-            view=verkeersopgaven.VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
+            view=verkeersopgaven.VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx,
+                                             typ=quest[0])
         )
 
-# Moderation functies #
+    # Moderation functies #
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.check(has_administrator_permission)
@@ -195,7 +204,7 @@ def run_discord_bot():
         change_status.start()
         await bot.tree.sync()
 
-# Auto disconnect discord bot from voicechannel and change RPC #
+    # Auto disconnect discord bot from voicechannel and change RPC #
 
     @tasks.loop(seconds=10)
     async def change_status():
