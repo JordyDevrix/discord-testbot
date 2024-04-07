@@ -1,7 +1,7 @@
 import asyncio
 import platform
 import time
-
+import supabase_connector
 import verkeersopgaven
 from lethal_functions import OpenNewQuestion
 import discord
@@ -22,18 +22,84 @@ def run_discord_bot():
         token: str = file.read()
 
     bot = commands.Bot(command_prefix=",", intents=discord.Intents.all())
+    intent = discord.Intents.default()
+    intent.members = True
+    intent.message_content = True
+
+    @bot.hybrid_command(name="set_updates_channel", description="sets a specific channel for updates")
+    @commands.guild_only()
+    @commands.check(has_administrator_permission)
+    async def set_updates_channel(ctx: commands.Context, channel):
+        for server_channel in ctx.guild.channels:
+            if str(server_channel.id) in str(channel):
+                print(server_channel.id, channel)
+                supabase_connector.set_updates_channel(server_channel.id, ctx.guild.id, ctx.guild.name)
+                await ctx.send(f"Channel: <#{server_channel.id}> set for bot announcements")
+
+    @set_updates_channel.error
+    async def set_updates_channel_error(ctx: commands.Context, error):
+        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+
+    @bot.hybrid_command(name="announce", description="announce something")
+    @commands.guild_only()
+    @commands.check(has_administrator_permission)
+    async def announce(ctx: commands.Context,
+                       title=None,
+                       content=None,
+                       links=None,
+                       mention_everyone=False,
+                       global_announcement=False
+                       ):
+        announcement_parts = [title, content, links]
+        if global_announcement:
+            if str(ctx.author.id) == "495328668105703426":
+                data = supabase_connector.get_all_update_channels()
+                for server in data:
+                    channel_id = server.get('announce_channel_id')
+                    channel = bot.get_channel(channel_id)
+                    print(channel)
+                    if channel_id is None:
+                        continue
+                    else:
+                        announcement = ""
+                        for part in announcement_parts:
+                            if part is None:
+                                pass
+                            else:
+                                announcement += f"{part}\n"
+                        if mention_everyone:
+                            announcement += f"{ctx.guild.default_role}"
+                        print("sending message...")
+                        await channel.send(announcement)
+
+                await ctx.send(f"Announcement made by {ctx.author.mention}")
+            else:
+                await ctx.send("You're not one of the bot developers", ephemeral=True)
+        else:
+            channel_id = supabase_connector.get_updates_channel(ctx.guild.id)
+            channel = ctx.guild.get_channel(channel_id)
+            announcement = ""
+            for part in announcement_parts:
+                if part is None:
+                    pass
+                else:
+                    announcement += f"{part}\n"
+            if mention_everyone:
+                announcement += f"{ctx.guild.default_role}"
+
+            await channel.send(announcement)
+            await ctx.send(f"Announcement made by {ctx.author.mention}")
+
+    @announce.error
+    async def announce_error(ctx: commands.Context, error):
+        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
     @bot.hybrid_command()
-    async def ping(ctx: commands.Context, my_channel):
-        if ctx.guild is None:
-            await ctx.send("this is dm")
-        else:
-            for channel in ctx.guild.channels:
-                if str(channel.id) in str(my_channel):
-                    print(channel.id, my_channel)
-                    await ctx.send(f"Channel: <#{channel.id}> set for bot announcements")
+    async def ping(ctx: commands.Context):
+        await ctx.send("pong")
 
     @bot.hybrid_command(name="stopradio", description="stop music")
+    @commands.guild_only()
     async def stop_jumbo_radio(ctx: commands.Context):
         try:
             print(ctx.guild.voice_client.channel)
@@ -44,6 +110,7 @@ def run_discord_bot():
             await ctx.send("**Bot is niet aanwezig in een voice channel**")
 
     @bot.hybrid_command(name="playradio", description="play music")
+    @commands.guild_only()
     async def play_jumbo_radio(ctx: commands.Context):
         try:
             channel = ctx.author.voice.channel
@@ -76,6 +143,7 @@ def run_discord_bot():
             await ctx.send(f"{e}")
 
     @bot.hybrid_command(name="dm", description="Verstuurd je een DM")
+    @commands.guild_only()
     async def dm(ctx: commands.Context):
         choose: str = random.choice(["Yo?", "Hoe kan ik je helpen?", "Iets nodig?"])
         await ctx.author.send(choose)
@@ -130,6 +198,7 @@ def run_discord_bot():
     # Moderation functies #
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
+    @commands.guild_only()
     @commands.check(has_administrator_permission)
     async def time_out(ctx: commands.Context,
                        member: discord.Member,
@@ -157,6 +226,7 @@ def run_discord_bot():
         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
     @bot.hybrid_command(name="kick", description="kick a member from the server")
+    @commands.guild_only()
     @commands.check(has_administrator_permission)
     async def kick(ctx: commands.Context, member: discord.Member, reason=None):
         print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
@@ -181,6 +251,7 @@ def run_discord_bot():
         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
+    @commands.guild_only()
     @commands.check(has_administrator_permission)
     async def un_time_out(ctx: commands.Context, member: discord.Member):
         # print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
@@ -205,6 +276,20 @@ def run_discord_bot():
         await bot.tree.sync()
 
     # Auto disconnect discord bot from voicechannel and change RPC #
+
+    @bot.event
+    async def on_message(message: discord.Message):
+        supabase_connector.add_new_chatlog(
+            message.guild.name,
+            message.guild.id,
+            message.author.id,
+            message.author.name,
+            message.content,
+            message.channel.name
+        )
+        # print(
+        #     f"{message.guild.id} {message.author.id} {message.author.name} {message.content} {message.channel.name}"
+        # )
 
     @tasks.loop(seconds=10)
     async def change_status():
