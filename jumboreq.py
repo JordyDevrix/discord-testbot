@@ -46,7 +46,7 @@ def get_jumbo_music():
     response = send_graphql_request(graphql_endpoint, graphql_query, graphql_variables)
     if response:
         print(response)
-        return response
+        return response.get("data").get("channel").get("playingnow").get("current").get("metadata")
     else:
         print("Failed to send GraphQL request.")
 

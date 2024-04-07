@@ -1,6 +1,8 @@
 import asyncio
 import platform
 import time
+
+import verkeersopgaven
 from lethal_functions import OpenNewQuestion
 import discord
 from discord.ext import commands, tasks
@@ -52,11 +54,8 @@ def run_discord_bot():
                 ))
             await channel.guild.me.edit(deafen=True)
             await channel.guild.me.edit(mute=False)
-
-            request: dict = jumboreq.get_jumbo_music()
-            response: dict = request.get("data").get("channel").get("playingnow").get("current").get("metadata")
+            response: dict = jumboreq.get_jumbo_music()
             if response.get("artist") == "Commercial":
-                print(response)
                 await ctx.send(f"Playing **{response.get('artist')}**")
             else:
                 await ctx.send(f"Playing **{response.get('artist')} - {response.get('title')}**")
@@ -70,76 +69,21 @@ def run_discord_bot():
             print(e)
             await ctx.send(f"{e}")
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(name="dm", description="Verstuurd je een DM")
     async def dm(ctx: commands.Context):
-        choose: str = random.choice(["sup?", "whats good?", "what ya need?"])
+        choose: str = random.choice(["Yo?", "Hoe kan ik je helpen?", "Iets nodig?"])
         await ctx.author.send(choose)
-        await ctx.send("watch yo dm's")
+        await ctx.send("Bekijk je DM's")
 
     @bot.hybrid_command(name="jumboradio", description="gives the current song playing on jumboradio")
     async def get_jumbo_radio(ctx: commands.Context):
-        request: dict = jumboreq.get_jumbo_music()
-        response: dict = request.get("data").get("channel").get("playingnow").get("current").get("metadata")
+        response: dict = jumboreq.get_jumbo_music()
         if response.get("artist") == "Commercial":
-            print(response)
             await ctx.send(f"Er speelt momenteel geen muziek: **{response.get('artist')}**")
         else:
             await ctx.send(f"Muziek op jumbo radio: **{response.get('artist')} - {response.get('title')}**")
 
-    class VerkeerButton(discord.ui.Button):
-        def __init__(self, option, ctx):
-            self.ctx: commands.Context = ctx
-            super().__init__(label=option, style=discord.ButtonStyle.primary)
-
-        async def callback(self, interaction):
-            if self.label == self.view.answer:
-                await interaction.response.send_message(f"Goedzo {interaction.user.mention}")
-            else:
-                await interaction.response.send_message(f"{interaction.user.mention} Kut kind, ga leren ofz...")
-
-    class VolgendeButton(discord.ui.Button):
-        def __init__(self, option, ctx):
-            self.ctx: commands.Context = ctx
-            super().__init__(label=option, style=discord.ButtonStyle.green)
-
-        async def callback(self, interaction):
-            if self.view.typ == "verkeersborden":
-                quest = OpenNewQuestion.get_new_bord()
-                question = quest[1]
-                picture_name = question["naam"]
-                picture_path = discord.File(f"{quest[0]}/{picture_name}.png", filename="output.png")
-                titler = "Borden"
-            else:
-                quest = OpenNewQuestion.get_new_situatie()
-                question = quest[1]
-                picture_name = question["naam"]
-                picture_path = discord.File(f"{quest[0]}/{picture_name}.jpg", filename="output.png")
-                titler = "Situaties"
-
-            vraag = question["vraag"]
-            embed = discord.Embed(title=titler, color=discord.Color(int('ffc800', 16)))
-            embed.add_field(name=f"{vraag} | `{picture_name}`", value="click op het juiste antwoord", inline=True)
-            embed.set_image(url=f"attachment://output.png")
-            await interaction.response.send_message(
-                embed=embed,
-                file=picture_path,
-                view=VerkeerView(options=question["options"],
-                                 answer=question["answer"],
-                                 ctx=self.ctx,
-                                 typ=quest[0])
-            )
-
-    class VerkeerView(discord.ui.View):
-        def __init__(self, options, answer, ctx, typ):
-            super().__init__()
-            self.answer = answer
-            self.typ = typ
-            for option in options:
-                try:
-                    self.add_item(VerkeerButton(option, ctx))
-                except Exception as e:
-                    print(e)
-            self.add_item(VolgendeButton("Next", ctx))
+# CBR verkeersvragen #
 
     @bot.hybrid_command(name="leerborden", description="leer verkeersborden")
     async def leerborden(ctx: commands.Context):
@@ -154,7 +98,7 @@ def run_discord_bot():
         await ctx.send(
             embed=embed,
             file=picture_path,
-            view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
+            view=verkeersopgaven.VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
         )
     @bot.hybrid_command(name="leersituaties", description="leer verkeerssituaties")
     async def leersituaties(ctx: commands.Context):
@@ -171,9 +115,10 @@ def run_discord_bot():
         await ctx.send(
             embed=embed,
             file=picture_path,
-            view=VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
+            view=verkeersopgaven.VerkeerView(options=question["options"], answer=question["answer"], ctx=ctx, typ=quest[0])
         )
 
+# Moderation functies #
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.check(has_administrator_permission)
@@ -229,7 +174,7 @@ def run_discord_bot():
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
     @commands.check(has_administrator_permission)
     async def un_time_out(ctx: commands.Context, member: discord.Member):
-        print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
+        # print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
         try:
             await member.edit(timed_out_until=None)
             await ctx.send(f"{member.mention}'s timeout got removed")
@@ -249,6 +194,8 @@ def run_discord_bot():
         print("bot running")
         change_status.start()
         await bot.tree.sync()
+
+# Auto disconnect discord bot from voicechannel and change RPC #
 
     @tasks.loop(seconds=10)
     async def change_status():
