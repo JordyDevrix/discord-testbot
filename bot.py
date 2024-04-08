@@ -279,13 +279,18 @@ def run_discord_bot():
 
     @bot.event
     async def on_message(message: discord.Message):
+        attachmentlist = ""
+        for idx, attachment in enumerate(message.attachments):
+            attachmentlist += f"({idx} - {attachment.filename} - {attachment.url})\n"
+
         supabase_connector.add_new_chatlog(
             message.guild.name,
             message.guild.id,
             message.author.id,
             message.author.name,
             message.content,
-            message.channel.name
+            message.channel.name,
+            attachmentlist
         )
         # print(
         #     f"{message.guild.id} {message.author.id} {message.author.name} {message.content} {message.channel.name}"

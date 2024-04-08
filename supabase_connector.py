@@ -67,7 +67,7 @@ def set_updates_channel(channel_id, server_id, server_name):
         ).eq('server_id', server_id).execute()
 
 
-def add_new_chatlog(server_name, server_id, user_id, user_name, message, channel):
+def add_new_chatlog(server_name, server_id, user_id, user_name, message, channel, attachment):
     try:
         supabase.table('chatlogs').insert(
             {
@@ -75,7 +75,8 @@ def add_new_chatlog(server_name, server_id, user_id, user_name, message, channel
                 "user_id": user_id,
                 "user_name": user_name,
                 "message": message,
-                "channel_name": channel
+                "channel_name": channel,
+                "attachment": attachment
             }
         ).execute()
     except postgrest.exceptions.APIError:
@@ -92,6 +93,7 @@ def add_new_chatlog(server_name, server_id, user_id, user_name, message, channel
                 "user_id": user_id,
                 "user_name": user_name,
                 "message": message,
-                "channel_name": channel
+                "channel_name": channel,
+                "attachment": attachment
             }
         ).execute()
