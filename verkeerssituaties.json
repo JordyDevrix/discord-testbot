@@ -170,6 +170,24 @@
       "answer": "24 uur"
     },
     {
+      "naam": "SIT14",
+      "vraag": "Je besluit toch te fietsen tijdens een rijontzegging. Ben je nu strafbaar?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT14",
+      "vraag": "Je besluit toch te fietsen tijdens een rijverbod. Ben je nu strafbaar?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
       "naam": "SIT15",
       "vraag": "Je banden hebben een profieldiepte van 2mm. Is dit een goede profieldiepte?",
       "options": [
@@ -186,6 +204,17 @@
         "Nee"
       ],
       "answer": "Nee"
+    },
+    {
+      "naam": "SIT15",
+      "vraag": "Wat is de minimale profieldiepte van een band",
+      "options": [
+        "1.4mm",
+        "1.6mm",
+        "1.8mm",
+        "2.0mm"
+      ],
+      "answer": "1.6mm"
     },
     {
       "naam": "SIT16",
@@ -360,7 +389,7 @@
         "Einde vooraf ingestelde maximum snelheid",
         "Einde vooraf ingestelde verboden"
       ],
-      "answer": "Ja"
+      "answer": "Einde vooraf ingestelde verboden"
     },
     {
       "naam": "SIT34",
@@ -389,6 +418,136 @@
         "Aan geen enkele zijde"
       ],
       "answer": "Aan geen enkele zijde"
+    },
+    {
+      "naam": "SIT37",
+      "vraag": "Je staat voor een rood licht, mag je nu je telefoon gebruiken?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT37",
+      "vraag": "Je staat vast in de file, mag je nu je telefoon gebruiken?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT38",
+      "vraag": "In welke situatie moet je de gevaren driehoek plaatsen",
+      "options": [
+        "A",
+        "B",
+        "A & B",
+        "Geen van beide"
+      ],
+      "answer": "A"
+    },
+    {
+      "naam": "SIT39",
+      "vraag": "Moet je gebruik maken van de spitsstrook als deze geopend is?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Ja"
+    },
+    {
+      "naam": "SIT40",
+      "vraag": "Je combinatie is 8 meter lang en onder de 3500kg. Mag je hier rijden?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT41",
+      "vraag": "Wat is de maximum snelheid",
+      "options": [
+        "70",
+        "80",
+        "100",
+        "130"
+      ],
+      "answer": "70"
+    },
+    {
+      "naam": "SIT42",
+      "vraag": "Het negeren van een stopteken wordt gezien als een...",
+      "options": [
+        "Lichte overtreding",
+        "Zware overtreding",
+        "Misdrijf",
+        "Belastingontduiking"
+      ],
+      "answer": "Zware overtreding"
+    },
+    {
+      "naam": "SIT43",
+      "vraag": "Mag je hier landbouw voertuigen inhalen?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
+    },
+    {
+      "naam": "SIT44",
+      "vraag": "Je rijd overdag op een autosnelweg met een dakkoffer. Hoe hard mag je in principe rijden",
+      "options": [
+        "80",
+        "90",
+        "100",
+        "130"
+      ],
+      "answer": "100"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Welke verkeersregels volgen sleep auto's?",
+      "options": [
+        "Normale verkeersregels",
+        "Aanhanger regels",
+        "Speciaal vervoer regels"
+      ],
+      "answer": "Aanhanger regels"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Wat is de minimale lengte voor een sleeptouw",
+      "options": [
+        "1 meter",
+        "2 meter",
+        "5 meter",
+        "Er is geen minimale lengte"
+      ],
+      "answer": "Er is geen minimale lengte"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Wat is de maximale lengte voor een sleeptouw",
+      "options": [
+        "1 meter",
+        "2 meter",
+        "5 meter",
+        "Er is geen maximale lengte"
+      ],
+      "answer": "5 meter"
+    },
+    {
+      "naam": "SIT45",
+      "vraag": "Mag je met een sleeptouw een motor trekken?",
+      "options": [
+        "Ja",
+        "Nee"
+      ],
+      "answer": "Nee"
     }
   ]
 }
