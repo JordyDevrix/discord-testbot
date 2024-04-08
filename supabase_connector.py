@@ -18,6 +18,8 @@ supabase: Client = create_client(url, key)
 def add_new_server():
     pass
 
+def get_role_by_id():
+    ...
 
 def get_all_update_channels():
     response = supabase.table('server').select('announce_channel_id').execute()
