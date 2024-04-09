@@ -278,10 +278,14 @@ def run_discord_bot():
     # Auto disconnect discord bot from voicechannel and change RPC #
 
     @bot.event
-    async def on_message(message: discord.Message):
+    async def on_message_delete(message: discord.Message):
         attachmentlist = ""
         for idx, attachment in enumerate(message.attachments):
             attachmentlist += f"({idx} - {attachment.filename} - {attachment.url})\n"
+
+        deleter = ""
+        async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
+            deleter = entry.user
 
         supabase_connector.add_new_chatlog(
             message.guild.name,
@@ -290,10 +294,12 @@ def run_discord_bot():
             message.author.name,
             message.content,
             message.channel.name,
-            attachmentlist
+            attachmentlist,
+            deleter.id
         )
         # print(
-        #     f"{message.guild.id} {message.author.id} {message.author.name} {message.content} {message.channel.name}"
+        #     f"{message.guild.id} {message.author.id} {message.author.name} {message.content} {message.channel.name} "
+        #     f"{deleter}"
         # )
 
     @tasks.loop(seconds=10)
