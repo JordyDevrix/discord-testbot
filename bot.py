@@ -36,6 +36,33 @@ def run_discord_bot():
                 supabase_connector.set_updates_channel(server_channel.id, ctx.guild.id, ctx.guild.name)
                 await ctx.send(f"Channel: <#{server_channel.id}> set for bot announcements")
 
+    @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
+    @commands.guild_only()
+    @commands.check(has_administrator_permission)
+    async def deletelog(ctx: commands.Context, amount=1):
+        server_id = ctx.guild.id
+        messages = supabase_connector.get_deleted_messages(server_id)
+        messages.reverse()
+        if len(messages) == 0:
+            await ctx.send("No deleted messages found")
+        else:
+            if amount > 10:
+                await ctx.send("Please do not request more then 10 messages")
+            else:
+                if amount == 1:
+                    await ctx.send(f"Sending last message")
+                else:
+                    await ctx.send(f"Sending last {amount} messages")
+                for i in range(amount):
+                    msg: dict = messages[i]
+                    msg_time = msg.get('message_time').split('.')[0].split('T')
+                    # print(f"{msg_time[0]} {msg_time[1]} | {msg.get('user_name')}\n"
+                    #       f"{msg.get('message')}\n"
+                    #       f"{msg.get('attachment')}")
+                    await ctx.send(f"`{msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
+                                   f"{msg.get('message')}\n"
+                                   f"{msg.get('attachment')}")
+
     @set_updates_channel.error
     async def set_updates_channel_error(ctx: commands.Context, error):
         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
@@ -281,7 +308,7 @@ def run_discord_bot():
     async def on_message_delete(message: discord.Message):
         attachmentlist = ""
         for idx, attachment in enumerate(message.attachments):
-            attachmentlist += f"({idx} - {attachment.filename} - {attachment.url})\n"
+            attachmentlist += f"{attachment.url}\n"
 
         deleter = ""
         async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
