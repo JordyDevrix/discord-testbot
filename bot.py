@@ -130,9 +130,15 @@ def run_discord_bot():
     @commands.guild_only()
     async def stop_jumbo_radio(ctx: commands.Context):
         try:
-            print(ctx.guild.voice_client.channel)
-            await ctx.guild.voice_client.disconnect(force=True)
-            await ctx.send("**Voice channel verlaten**")
+            for idx, voice_channel in enumerate(ctx.guild.voice_channels):
+                removed = False
+                if ctx.author in voice_channel.members:
+                    print(ctx.guild.voice_client.channel)
+                    await ctx.guild.voice_client.disconnect(force=True)
+                    await ctx.send("**Voice channel verlaten**")
+                    removed = True
+                if len(ctx.guild.voice_channels) == idx + 1 and not removed:
+                    await ctx.send("**Je moet eerst een voicechannel joinen**")
         except Exception as e:
             print(e)
             await ctx.send("**Bot is niet aanwezig in een voice channel**")
@@ -166,9 +172,9 @@ def run_discord_bot():
             else:
                 await ctx.send(f"**Het is niet mogelijk om in DM muziek af te spelen**")
         except Exception as e:
-            await ctx.send("**Er is niemand aanwezig in een voicechannel**")
+            # await ctx.send("**Er is niemand aanwezig in een voicechannel**")
             print(e)
-            await ctx.send(f"{e}")
+            await ctx.send(f"**{e}**")
 
     @bot.hybrid_command(name="dm", description="Verstuurd je een DM")
     @commands.guild_only()
