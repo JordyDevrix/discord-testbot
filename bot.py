@@ -42,7 +42,8 @@ def run_discord_bot():
     async def deletelog(ctx: commands.Context, amount=1):
         server_id = ctx.guild.id
         messages = supabase_connector.get_deleted_messages(server_id)
-        messages.reverse()
+        messages_sorted = sorted(messages, key=lambda x: x['id'])
+        messages_sorted.reverse()
         if len(messages) == 0:
             await ctx.send("No deleted messages found")
         else:
@@ -54,12 +55,12 @@ def run_discord_bot():
                 else:
                     await ctx.send(f"Sending last {amount} messages")
                 for i in range(amount):
-                    msg: dict = messages[i]
+                    msg: dict = messages_sorted[i]
                     msg_time = msg.get('message_time').split('.')[0].split('T')
                     # print(f"{msg_time[0]} {msg_time[1]} | {msg.get('user_name')}\n"
                     #       f"{msg.get('message')}\n"
                     #       f"{msg.get('attachment')}")
-                    await ctx.send(f"`{msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
+                    await ctx.send(f"`ID:{msg.get('id')} | {msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
                                    f"{msg.get('message')}\n"
                                    f"{msg.get('attachment')}")
 
