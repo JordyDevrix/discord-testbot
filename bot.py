@@ -16,6 +16,17 @@ def run_discord_bot():
     def has_administrator_permission(ctx):
         return ctx.author.guild_permissions.administrator
 
+    def has_admin_role(ctx: commands.Context):
+        role_list = []
+        for role in ctx.author.roles:
+            role_list.append(role.id)
+
+        print(role_list)
+        if supabase_connector.get_admin_role(ctx.guild.id)[0].get('admin_role') in role_list:
+            return True
+        else:
+            return False
+
     with open("token.txt", "r") as file:
         token: str = file.read()
 
@@ -64,9 +75,13 @@ def run_discord_bot():
                 supabase_connector.set_updates_channel(server_channel.id, ctx.guild.id, ctx.guild.name)
                 await ctx.send(f"Channel: <#{server_channel.id}> set for bot announcements")
 
+    @set_updates_channel.error
+    async def set_updates_channel_error(ctx: commands.Context, error):
+        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+
     @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
     @commands.guild_only()
-    @commands.check(has_administrator_permission)
+    @commands.check(has_admin_role)
     async def deletelog(ctx: commands.Context, amount=1):
         server_id = ctx.guild.id
         messages = supabase_connector.get_deleted_messages(server_id)
@@ -89,8 +104,8 @@ def run_discord_bot():
                                    f"{msg.get('message')}\n"
                                    f"{msg.get('attachment')}")
 
-    @set_updates_channel.error
-    async def set_updates_channel_error(ctx: commands.Context, error):
+    @deletelog.error
+    async def deletelog_error(ctx: commands.Context, error):
         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
     @bot.hybrid_command(name="announce", description="announce something")

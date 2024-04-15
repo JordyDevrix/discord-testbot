@@ -63,8 +63,8 @@ def get_admin_role(server_id):
     return response.data
 
 
-def get_moderator_role():
-    response = supabase.table('server').select('admin_role').eq('server_id', server_id).execute()
+def get_moderator_role(server_id):
+    response = supabase.table('server').select('moderator_role').eq('server_id', server_id).execute()
     print(response.data)
     return response.data
 
