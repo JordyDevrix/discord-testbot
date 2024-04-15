@@ -48,7 +48,7 @@ def run_discord_bot():
             server_name = ctx.guild.name
             role_id = role.id
             print(role_id)
-            supabase_connector.set_role(server_id, server_name, role_id, "admin_role")
+            supabase_connector.set_role(server_id, server_name, role_id, "moderator_role")
             await ctx.send("**Rol is toegevoegd**")
         except Exception as e:
             print(e)
