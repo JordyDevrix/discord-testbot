@@ -57,9 +57,6 @@ def run_discord_bot():
                 for i in range(amount):
                     msg: dict = messages_sorted[i]
                     msg_time = msg.get('message_time').split('.')[0].split('T')
-                    # print(f"{msg_time[0]} {msg_time[1]} | {msg.get('user_name')}\n"
-                    #       f"{msg.get('message')}\n"
-                    #       f"{msg.get('attachment')}")
                     await ctx.send(f"`ID:{msg.get('id')} | {msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
                                    f"{msg.get('message')}\n"
                                    f"{msg.get('attachment')}")
@@ -85,7 +82,6 @@ def run_discord_bot():
                 for server in data:
                     channel_id = server.get('announce_channel_id')
                     channel = bot.get_channel(channel_id)
-                    print(channel)
                     if channel_id is None:
                         continue
                     else:
@@ -97,7 +93,6 @@ def run_discord_bot():
                                 announcement += f"{part}\n"
                         if mention_everyone:
                             announcement += f"{ctx.guild.default_role}"
-                        print("sending message...")
                         await channel.send(announcement)
 
                 await ctx.send(f"Announcement made by {ctx.author.mention}")
@@ -321,20 +316,20 @@ def run_discord_bot():
         async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
             deleter = entry.user
 
-        supabase_connector.add_new_chatlog(
-            message.guild.name,
-            message.guild.id,
-            message.author.id,
-            message.author.name,
-            message.content,
-            message.channel.name,
-            attachmentlist,
-            deleter.id
-        )
-        # print(
-        #     f"{message.guild.id} {message.author.id} {message.author.name} {message.content} {message.channel.name} "
-        #     f"{deleter}"
-        # )
+        try:
+            if supabase_connector.get_deletelog_permission(message.guild.id)[0].get('deletelog'):
+                supabase_connector.add_new_chatlog(
+                    message.guild.name,
+                    message.guild.id,
+                    message.author.id,
+                    message.author.name,
+                    message.content,
+                    message.channel.name,
+                    attachmentlist,
+                    deleter.id
+                )
+        except Exception as e:
+            print(e)
 
     @tasks.loop(seconds=10)
     async def change_status():

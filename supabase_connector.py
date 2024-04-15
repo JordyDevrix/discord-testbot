@@ -16,11 +16,17 @@ supabase: Client = create_client(url, key)
 
 
 def add_new_server():
-    pass
+    ...
 
 
 def get_role_by_id():
     ...
+
+
+def get_deletelog_permission(server_id):
+    response = supabase.table('server').select('deletelog').eq('server_id', server_id).execute()
+    print(response.data)
+    return response.data
 
 
 def get_deleted_messages(server_id):
