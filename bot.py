@@ -81,7 +81,7 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
     @commands.guild_only()
-    @commands.check(has_admin_role)
+    @commands.check(has_administrator_permission)
     async def deletelog(ctx: commands.Context, amount=1):
         server_id = ctx.guild.id
         messages = supabase_connector.get_deleted_messages(server_id)
