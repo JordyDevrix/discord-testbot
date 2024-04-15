@@ -1,17 +1,15 @@
-import asyncio
+import datetime
 import platform
-import time
+import random
+
+import discord
+from discord import FFmpegPCMAudio
+from discord.ext import commands, tasks
+
+import jumboreq
 import supabase_connector
 import verkeersopgaven
 from lethal_functions import OpenNewQuestion
-import discord
-from discord.ext import commands, tasks
-from discord.ext.commands import has_permissions
-from discord import Interaction
-import random
-import datetime
-import jumboreq
-from discord import FFmpegPCMAudio
 
 
 def run_discord_bot():
