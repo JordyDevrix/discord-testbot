@@ -35,6 +35,46 @@ def run_discord_bot():
     intent.members = True
     intent.message_content = True
 
+    @bot.event
+    async def on_member_join(member: discord.Member):
+        server_id = member.guild.id
+        current_join_roles: list = supabase_connector.get_on_join_roles(server_id)[0].get("on_join_roles")
+        for role_id in current_join_roles:
+            role = discord.utils.get(member.guild.roles, id=role_id)
+            await member.add_roles(role)
+
+    @bot.hybrid_command(name="remove_join_role", description="Remove a join role")
+    @commands.guild_only()
+    @commands.check(has_administrator_permission)
+    async def remove_join_role(ctx: commands.Context, role: discord.Role):
+        ...
+
+    @bot.hybrid_command(name="set_join_role", description="Set a role a user gets when they join the server")
+    @commands.guild_only()
+    @commands.check(has_administrator_permission)
+    async def set_join_role(ctx: commands.Context, role: discord.Role):
+        server_id = ctx.guild.id
+        server_name = ctx.guild.name
+        role_to_set = role.id
+        current_join_roles: list = supabase_connector.get_on_join_roles(server_id)[0].get("on_join_roles")
+        if current_join_roles is None:
+            current_join_roles = [role_to_set]
+            await ctx.send("Adding role")
+        else:
+            role_added = False
+            for role in current_join_roles:
+                if role == role_to_set:
+                    role_added = True
+
+            if role_added:
+                await ctx.send("Role has already been added")
+            else:
+                current_join_roles.append(role_to_set)
+                await ctx.send("Adding role")
+
+        supabase_connector.set_on_join_roles(server_id, server_name, current_join_roles)
+
+
     @bot.hybrid_command(name="set_admin_role", description="Set a role as moderator role")
     @commands.guild_only()
     @commands.check(has_administrator_permission)

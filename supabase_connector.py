@@ -23,6 +23,46 @@ def get_role_by_id():
     ...
 
 
+def get_on_join_roles(server_id):
+    response = supabase.table('server').select('on_join_roles').eq('server_id', server_id).execute()
+    print(response.data)
+    return response.data
+
+
+def set_on_join_roles(server_id, server_name, roles):
+    try:
+        response = supabase.table('server').select('*').eq('server_id', server_id).execute()
+
+        # checking if the server table already exists and creating if not #
+        if len(response.data) == 0:
+            supabase.table('server').insert(
+                {
+                    "server_id": server_id,
+                    "server_name": server_name,
+                }
+            ).execute()
+
+        supabase.table('server').update(
+            {
+                "on_join_roles": roles
+            }
+        ).eq('server_id', server_id).execute()
+    except Exception as e:
+        print(e)
+        supabase.table('server').insert(
+            {
+                "server_id": server_id,
+                "server_name": server_name,
+            }
+        ).execute()
+
+        supabase.table('server').update(
+            {
+                "on_join_roles": roles
+            }
+        ).eq('server_id', server_id).execute()
+
+
 def set_role(server_id, server_name, role_id, role_to_set):
     try:
         response = supabase.table('server').select('*').eq('server_id', server_id).execute()
