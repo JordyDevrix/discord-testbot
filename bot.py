@@ -43,28 +43,40 @@ def run_discord_bot():
             role = discord.utils.get(member.guild.roles, id=role_id)
             await member.add_roles(role)
 
+    @bot.hybrid_command(name="join_roles", description="Remove a join role")
+    @commands.guild_only()
+    async def join_roles(ctx: commands.Context):
+        server_id = ctx.guild.id
+        join_role_list: list = supabase_connector.get_on_join_roles(server_id)[0].get("on_join_roles")
+        message = ""
+        if len(join_role_list) == 0:
+            await ctx.send("No roles found")
+        else:
+            for idx, role in enumerate(join_role_list):
+                message += f"{idx+1} - {discord.utils.get(ctx.guild.roles, id=role)}\n"
+
+            await ctx.send(f"Roles found:\n{message}")
+
     @bot.hybrid_command(name="remove_join_role", description="Remove a join role")
     @commands.guild_only()
     @commands.check(has_administrator_permission)
     async def remove_join_role(ctx: commands.Context, role: discord.Role):
         server_id = ctx.guild.id
+        roler = role
         server_name = ctx.guild.name
         role_to_remove = role.id
         current_join_roles: list = supabase_connector.get_on_join_roles(server_id)[0].get("on_join_roles")
-        if current_join_roles is None:
-            current_join_roles = [role_to_remove]
-            await ctx.send("No roles have been added")
-        else:
-            role_found = False
-            for role in current_join_roles:
-                if role == role_to_remove:
-                    role_found = True
 
-            if role_found:
-                current_join_roles.append(role_to_remove)
-                await ctx.send(f"Removing role **{role.name}**")
-            else:
-                await ctx.send("Role not found")
+        role_found = False
+        for role in current_join_roles:
+            if role == role_to_remove:
+                role_found = True
+
+        if role_found:
+            current_join_roles.remove(role_to_remove)
+            await ctx.send(f"Removing role **{roler.name}**")
+        else:
+            await ctx.send("Role not found")
 
         supabase_connector.set_on_join_roles(server_id, server_name, current_join_roles)
 
@@ -72,6 +84,8 @@ def run_discord_bot():
     async def remove_join_role_error(ctx: commands.Context, error):
         if isinstance(error, PermissionError):
             await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="set_join_role", description="Set a role a user gets when they join the server")
     @commands.guild_only()
@@ -81,27 +95,26 @@ def run_discord_bot():
         server_name = ctx.guild.name
         role_to_set = role.id
         current_join_roles: list = supabase_connector.get_on_join_roles(server_id)[0].get("on_join_roles")
-        if current_join_roles is None:
-            current_join_roles = [role_to_set]
-            await ctx.send("Adding role")
-        else:
-            role_added = False
-            for role in current_join_roles:
-                if role == role_to_set:
-                    role_added = True
 
-            if role_added:
-                await ctx.send("Role has already been added")
-            else:
-                current_join_roles.append(role_to_set)
-                await ctx.send("Adding role")
+        role_added = False
+        for role in current_join_roles:
+            if role == role_to_set:
+                role_added = True
+
+        if role_added:
+            await ctx.send("Role has already been added")
+        else:
+            current_join_roles.append(role_to_set)
+            await ctx.send("Added role")
 
         supabase_connector.set_on_join_roles(server_id, server_name, current_join_roles)
 
     @set_join_role.error
     async def set_join_role_error(ctx: commands.Context, error):
-        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
-
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="set_admin_role", description="Set a role as moderator role")
     @commands.guild_only()
@@ -145,7 +158,10 @@ def run_discord_bot():
 
     @set_updates_channel.error
     async def set_updates_channel_error(ctx: commands.Context, error):
-        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
     @commands.guild_only()
@@ -174,7 +190,10 @@ def run_discord_bot():
 
     @deletelog.error
     async def deletelog_error(ctx: commands.Context, error):
-        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="announce", description="announce something")
     @commands.guild_only()
@@ -226,7 +245,10 @@ def run_discord_bot():
 
     @announce.error
     async def announce_error(ctx: commands.Context, error):
-        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command()
     async def ping(ctx: commands.Context):
@@ -357,13 +379,16 @@ def run_discord_bot():
             await member.send(f"you got timed out for {duration.seconds} seconds in {ctx.guild.name} for {reason}")
         except Exception as e:
             await ctx.send(
-                "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
+                "You cannot timeout members with same or higher permissions",
                 ephemeral=True)
             print(e)
 
     @time_out.error
     async def time_out_error(ctx: commands.Context, error):
-        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="kick", description="kick a member from the server")
     @commands.guild_only()
@@ -388,7 +413,10 @@ def run_discord_bot():
 
     @kick.error
     async def kick_error(ctx: commands.Context, error):
-        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
     @commands.guild_only()
@@ -401,13 +429,16 @@ def run_discord_bot():
             await member.send(f"your timeout got removed in {ctx.guild.name}")
         except Exception as e:
             await ctx.send(
-                "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
+                "You cannot remove timeouts without the correct permission",
                 ephemeral=True)
             print(e)
 
     @un_time_out.error
     async def time_out_error(ctx: commands.Context, error):
-        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+        else:
+            await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.event
     async def on_ready():
