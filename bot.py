@@ -47,7 +47,31 @@ def run_discord_bot():
     @commands.guild_only()
     @commands.check(has_administrator_permission)
     async def remove_join_role(ctx: commands.Context, role: discord.Role):
-        ...
+        server_id = ctx.guild.id
+        server_name = ctx.guild.name
+        role_to_remove = role.id
+        current_join_roles: list = supabase_connector.get_on_join_roles(server_id)[0].get("on_join_roles")
+        if current_join_roles is None:
+            current_join_roles = [role_to_remove]
+            await ctx.send("No roles have been added")
+        else:
+            role_found = False
+            for role in current_join_roles:
+                if role == role_to_remove:
+                    role_found = True
+
+            if role_found:
+                current_join_roles.append(role_to_remove)
+                await ctx.send(f"Removing role **{role.name}**")
+            else:
+                await ctx.send("Role not found")
+
+        supabase_connector.set_on_join_roles(server_id, server_name, current_join_roles)
+
+    @remove_join_role.error
+    async def remove_join_role_error(ctx: commands.Context, error):
+        if isinstance(error, PermissionError):
+            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
     @bot.hybrid_command(name="set_join_role", description="Set a role a user gets when they join the server")
     @commands.guild_only()
@@ -73,6 +97,10 @@ def run_discord_bot():
                 await ctx.send("Adding role")
 
         supabase_connector.set_on_join_roles(server_id, server_name, current_join_roles)
+
+    @set_join_role.error
+    async def set_join_role_error(ctx: commands.Context, error):
+        await ctx.reply("no perms, cry cry :_(", ephemeral=True)
 
 
     @bot.hybrid_command(name="set_admin_role", description="Set a role as moderator role")
