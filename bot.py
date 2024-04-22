@@ -44,6 +44,7 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="join_roles", description="Remove a join role")
     @commands.guild_only()
+    @commands.check(has_manage_server_permission)
     async def join_roles(ctx: commands.Context):
         server_id = ctx.guild.id
         join_role_list: list = supabase_connector.get_on_join_roles(server_id)[0].get("on_join_roles")
@@ -58,7 +59,7 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="remove_join_role", description="Remove a join role")
     @commands.guild_only()
-    @commands.check(has_administrator_permission)
+    @commands.check(has_manage_server_permission)
     async def remove_join_role(ctx: commands.Context, role: discord.Role):
         server_id = ctx.guild.id
         roler = role
@@ -88,7 +89,7 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="set_join_role", description="Set a role a user gets when they join the server")
     @commands.guild_only()
-    @commands.check(has_administrator_permission)
+    @commands.check(has_manage_server_permission)
     async def set_join_role(ctx: commands.Context, role: discord.Role):
         server_id = ctx.guild.id
         server_name = ctx.guild.name
@@ -360,7 +361,7 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.guild_only()
-    @commands.check(has_administrator_permission)
+    @commands.check(has_timeout_permission)
     async def time_out(ctx: commands.Context,
                        member: discord.Member,
                        seconds: int = 0,
@@ -395,7 +396,7 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="kick", description="kick a member from the server")
     @commands.guild_only()
-    @commands.check(has_administrator_permission)
+    @commands.check(has_kick_permission)
     async def kick(ctx: commands.Context, member: discord.Member, reason=None):
         print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
         if ctx.author.id == member.id:
@@ -427,7 +428,7 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
     @commands.guild_only()
-    @commands.check(has_administrator_permission)
+    @commands.check(has_untimeout_permission)
     async def un_time_out(ctx: commands.Context, member: discord.Member):
         try:
             await member.edit(timed_out_until=None)
