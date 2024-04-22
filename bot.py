@@ -5,17 +5,16 @@ import random
 import discord
 from discord import FFmpegPCMAudio
 from discord.ext import commands, tasks
+from discord.ext.commands import CheckFailure
 
 import jumboreq
 import supabase_connector
 import verkeersopgaven
 from lethal_functions import OpenNewQuestion
+from permission_check import *
 
 
 def run_discord_bot():
-    def has_administrator_permission(ctx):
-        return ctx.author.guild_permissions.administrator
-
     def has_admin_role(ctx: commands.Context):
         role_list = []
         for role in ctx.author.roles:
@@ -369,25 +368,27 @@ def run_discord_bot():
                        hours: int = 0,
                        reason=None):
         print(f"{ctx.command} -- {member} -- {reason}")
-        duration = datetime.timedelta(seconds=seconds, minutes=minutes, hours=hours, days=0)
-        try:
-            await member.timeout(duration, reason=reason)
-            if reason is None:
-                await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds")
-            else:
-                await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds for {reason}")
-            await member.send(f"you got timed out for {duration.seconds} seconds in {ctx.guild.name} for {reason}")
-        except Exception as e:
-            await ctx.send(
-                "You cannot timeout members with same or higher permissions",
-                ephemeral=True)
-            print(e)
+        if ctx.author.id == member.id:
+            await ctx.send("You cannot give yourself a timeout")
+        else:
+            duration = datetime.timedelta(seconds=seconds, minutes=minutes, hours=hours, days=0)
+            try:
+                await member.timeout(duration, reason=reason)
+                if reason is None:
+                    await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds")
+                else:
+                    await ctx.send(f"{member.mention} got timed out for {duration.seconds} seconds for {reason}")
+                await member.send(f"you got timed out for {duration.seconds} seconds in {ctx.guild.name} for {reason}")
+            except Exception as e:
+                await ctx.send(
+                    "You cannot timeout members with same or higher permissions",
+                    ephemeral=True)
+                print(e)
 
     @time_out.error
-    async def time_out_error(ctx: commands.Context, error: Exception):
-        # Need to check the error here
+    async def time_out_error(ctx: commands.Context, error: discord.ext.commands.errors.CheckFailure):
         print(error)
-        if isinstance(error, PermissionError):
+        if isinstance(error, (PermissionError, CheckFailure)):
             await ctx.reply("no perms, cry cry :_(", ephemeral=True)
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
@@ -397,25 +398,29 @@ def run_discord_bot():
     @commands.check(has_administrator_permission)
     async def kick(ctx: commands.Context, member: discord.Member, reason=None):
         print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
-        try:
-            if reason is None:
-                await member.send(f"You have been kicked from {ctx.guild.name}")
-            else:
-                await member.send(f"You have been kicked from {ctx.guild.name} for {reason}")
-            await member.kick(reason=reason)
-            if reason is None:
-                await ctx.send(f"{member.mention} got kicked from the server")
-            else:
-                await ctx.send(f"{member.mention} got kicked for {reason}")
-        except Exception as e:
-            await ctx.send(
-                "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
-                ephemeral=True)
-            print(e)
+        if ctx.author.id == member.id:
+            await ctx.send("You cannot kick yourself")
+        else:
+            try:
+                if reason is None:
+                    await member.send(f"You have been kicked from {ctx.guild.name}")
+                else:
+                    await member.send(f"You have been kicked from {ctx.guild.name} for {reason}")
+                await member.kick(reason=reason)
+                if reason is None:
+                    await ctx.send(f"{member.mention} got kicked from the server")
+                else:
+                    await ctx.send(f"{member.mention} got kicked for {reason}")
+            except Exception as e:
+                await ctx.send(
+                    "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
+                    ephemeral=True)
+                print(e)
 
     @kick.error
     async def kick_error(ctx: commands.Context, error):
-        if isinstance(error, PermissionError):
+        print(error)
+        if isinstance(error, (PermissionError, CheckFailure)):
             await ctx.reply("no perms, cry cry :_(", ephemeral=True)
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
@@ -424,7 +429,6 @@ def run_discord_bot():
     @commands.guild_only()
     @commands.check(has_administrator_permission)
     async def un_time_out(ctx: commands.Context, member: discord.Member):
-        # print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
         try:
             await member.edit(timed_out_until=None)
             await ctx.send(f"{member.mention}'s timeout got removed")
@@ -437,7 +441,8 @@ def run_discord_bot():
 
     @un_time_out.error
     async def time_out_error(ctx: commands.Context, error):
-        if isinstance(error, PermissionError):
+        print(error)
+        if isinstance(error, (PermissionError, CheckFailure)):
             await ctx.reply("no perms, cry cry :_(", ephemeral=True)
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
