@@ -384,7 +384,9 @@ def run_discord_bot():
             print(e)
 
     @time_out.error
-    async def time_out_error(ctx: commands.Context, error):
+    async def time_out_error(ctx: commands.Context, error: Exception):
+        # Need to check the error here
+        print(error)
         if isinstance(error, PermissionError):
             await ctx.reply("no perms, cry cry :_(", ephemeral=True)
         else:
