@@ -4,6 +4,8 @@ LABEL authors="2109j"
 
 ADD . .
 
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
 RUN ollama run llama2-uncensored
 
 RUN pip install discord requests python-vlc discord.py[voice] discord.py ffmpeg supabase
