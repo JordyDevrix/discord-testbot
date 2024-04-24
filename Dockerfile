@@ -4,7 +4,7 @@ LABEL authors="2109j"
 
 ADD . .
 
-RUN pip install discord requests python-vlc discord.py[voice] discord.py ffmpeg supabase
+RUN pip install discord requests python-vlc discord.py[voice] discord.py ffmpeg supabase openai
 
 RUN apt-get update && \
     apt-get install -y ffmpeg && \

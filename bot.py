@@ -1,6 +1,8 @@
 import datetime
+import json
 import platform
 import random
+from openai import OpenAI
 
 import discord
 from discord import FFmpegPCMAudio
@@ -15,6 +17,12 @@ from permission_check import *
 
 
 def run_discord_bot():
+
+    with open("supacredentials.json", "r") as file:
+        data = json.load(file)
+        api_key = data.get("GPT_KEY")
+        client = OpenAI(api_key=api_key)
+
     def has_admin_role(ctx: commands.Context):
         role_list = []
         for role in ctx.author.roles:
@@ -41,6 +49,22 @@ def run_discord_bot():
         for role_id in current_join_roles:
             role = discord.utils.get(member.guild.roles, id=role_id)
             await member.add_roles(role)
+
+    @bot.hybrid_command(name="chat", description="Use the bot's AI functionality")
+    @commands.guild_only()
+    async def chat(ctx: commands.Context, msg):
+        msg_edit = await ctx.reply(":arrows_clockwise: Generating response...")
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": msg}
+                ]
+            )
+            await msg_edit.edit(content=f"`q='{msg}'`\n{response.choices[0].message.content}")
+        except Exception as e:
+            print(e)
+            await ctx.send("Something went wrong")
 
     @bot.hybrid_command(name="join_roles", description="Remove a join role")
     @commands.guild_only()
