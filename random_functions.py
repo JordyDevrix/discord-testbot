@@ -30,4 +30,4 @@ def get_random_activity():
 
     # print(f"{response.json().get('type')}: {response.json().get('activity')}")
 
-    return f"{response.json().get('type')}: {response.json().get('activity')}"
+    return f"**{response.json().get('type').capitalize()}**: {response.json().get('activity')}"

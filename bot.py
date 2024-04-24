@@ -3,6 +3,7 @@ import json
 import platform
 import random
 from openai import OpenAI
+import random_functions
 
 import discord
 from discord import FFmpegPCMAudio
@@ -70,6 +71,18 @@ def run_discord_bot():
     async def ik_google_het_wel(ctx: commands.Context, query):
         te_googlen = query.strip().replace(' ', '+')
         await ctx.send(f"https://www.qooqle.nl/?q={te_googlen}")
+
+    @bot.hybrid_command(name="random_activity", description="Get a random activity when you're bored")
+    async def random_activity(ctx: commands.Context):
+        activity = random_functions.get_random_activity()
+        await ctx.send(activity)
+
+    @bot.hybrid_command(name="number_fact", description="Get a fact about a number")
+    async def number_fact(ctx: commands.Context, number=None):
+        if number is None:
+            number = random.randint(0, 256)
+        fact = random_functions.get_number(number)
+        await ctx.send(fact)
 
     @bot.hybrid_command(name="join_roles", description="Remove a join role")
     @commands.guild_only()
