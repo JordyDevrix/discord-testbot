@@ -66,6 +66,11 @@ def run_discord_bot():
             print(e)
             await ctx.send("Something went wrong")
 
+    @bot.hybrid_command(name="google", description="Use qooqle to search something for someone")
+    async def ik_google_het_wel(ctx: commands.Context, query):
+        te_googlen = query.strip().replace(' ', '+')
+        await ctx.send(f"https://www.qooqle.nl/?q={te_googlen}")
+
     @bot.hybrid_command(name="join_roles", description="Remove a join role")
     @commands.guild_only()
     @commands.check(has_manage_server_permission)
