@@ -24,17 +24,6 @@ def run_discord_bot():
         api_key = data.get("GPT_KEY")
         client = OpenAI(api_key=api_key)
 
-    def has_admin_role(ctx: commands.Context):
-        role_list = []
-        for role in ctx.author.roles:
-            role_list.append(role.id)
-
-        print(role_list)
-        if supabase_connector.get_admin_role(ctx.guild.id)[0].get('admin_role') in role_list:
-            return True
-        else:
-            return False
-
     with open("token.txt", "r") as file:
         token: str = file.read()
 
@@ -66,6 +55,15 @@ def run_discord_bot():
         except Exception as e:
             print(e)
             await ctx.send("Something went wrong")
+
+    @bot.hybrid_command(
+        name="jumbothelp",
+        description="This command will send a link in the chat to the jumbot website",
+        usage="use by entering /help in the chat",
+        brief="Help command"
+    )
+    async def help_command(ctx: commands.Context):
+        await ctx.send(f"https://jumbot.jordydevrix.com/")
 
     @bot.hybrid_command(name="google", description="Use qooqle to search something for someone")
     async def ik_google_het_wel(ctx: commands.Context, query):
@@ -173,20 +171,20 @@ def run_discord_bot():
             print(e)
             await ctx.send("**Er ging iets fout, probeer het later opnieuw**")
 
-    @bot.hybrid_command(name="set_moderator_role", description="Set a role as moderator role")
-    @commands.guild_only()
-    @commands.check(has_administrator_permission)
-    async def set_moderator_role(ctx: commands.Context, role: discord.Role):
-        try:
-            server_id = ctx.guild.id
-            server_name = ctx.guild.name
-            role_id = role.id
-            print(role_id)
-            supabase_connector.set_role(server_id, server_name, role_id, "moderator_role")
-            await ctx.send("**Rol is toegevoegd**")
-        except Exception as e:
-            print(e)
-            await ctx.send("**Er ging iets fout, probeer het later opnieuw**")
+    # @bot.hybrid_command(name="set_moderator_role", description="Set a role as moderator role")
+    # @commands.guild_only()
+    # @commands.check(has_administrator_permission)
+    # async def set_moderator_role(ctx: commands.Context, role: discord.Role):
+    #     try:
+    #         server_id = ctx.guild.id
+    #         server_name = ctx.guild.name
+    #         role_id = role.id
+    #         print(role_id)
+    #         supabase_connector.set_role(server_id, server_name, role_id, "moderator_role")
+    #         await ctx.send("**Rol is toegevoegd**")
+    #     except Exception as e:
+    #         print(e)
+    #         await ctx.send("**Er ging iets fout, probeer het later opnieuw**")
 
     @bot.hybrid_command(name="set_updates_channel", description="sets a specific channel for updates")
     @commands.guild_only()
@@ -292,9 +290,9 @@ def run_discord_bot():
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
 
-    @bot.hybrid_command()
-    async def ping(ctx: commands.Context):
-        await ctx.send("pong")
+    # @bot.hybrid_command()
+    # async def ping(ctx: commands.Context):
+    #     await ctx.send("pong")
 
     @bot.hybrid_command(name="stopradio", description="stop music")
     @commands.guild_only()
@@ -436,37 +434,37 @@ def run_discord_bot():
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
 
-    @bot.hybrid_command(name="kick", description="kick a member from the server")
-    @commands.guild_only()
-    @commands.check(has_kick_permission)
-    async def kick(ctx: commands.Context, member: discord.Member, reason=None):
-        print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
-        if ctx.author.id == member.id:
-            await ctx.send("You cannot kick yourself")
-        else:
-            try:
-                if reason is None:
-                    await member.send(f"You have been kicked from {ctx.guild.name}")
-                else:
-                    await member.send(f"You have been kicked from {ctx.guild.name} for {reason}")
-                await member.kick(reason=reason)
-                if reason is None:
-                    await ctx.send(f"{member.mention} got kicked from the server")
-                else:
-                    await ctx.send(f"{member.mention} got kicked for {reason}")
-            except Exception as e:
-                await ctx.send(
-                    "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
-                    ephemeral=True)
-                print(e)
-
-    @kick.error
-    async def kick_error(ctx: commands.Context, error):
-        print(error)
-        if isinstance(error, (PermissionError, CheckFailure)):
-            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
-        else:
-            await ctx.send("Something went wrong try again later or contact the developer")
+    # @bot.hybrid_command(name="kick", description="kick a member from the server")
+    # @commands.guild_only()
+    # @commands.check(has_kick_permission)
+    # async def kick(ctx: commands.Context, member: discord.Member, reason=None):
+    #     print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
+    #     if ctx.author.id == member.id:
+    #         await ctx.send("You cannot kick yourself")
+    #     else:
+    #         try:
+    #             if reason is None:
+    #                 await member.send(f"You have been kicked from {ctx.guild.name}")
+    #             else:
+    #                 await member.send(f"You have been kicked from {ctx.guild.name} for {reason}")
+    #             await member.kick(reason=reason)
+    #             if reason is None:
+    #                 await ctx.send(f"{member.mention} got kicked from the server")
+    #             else:
+    #                 await ctx.send(f"{member.mention} got kicked for {reason}")
+    #         except Exception as e:
+    #             await ctx.send(
+    #                 "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
+    #                 ephemeral=True)
+    #             print(e)
+    #
+    # @kick.error
+    # async def kick_error(ctx: commands.Context, error):
+    #     print(error)
+    #     if isinstance(error, (PermissionError, CheckFailure)):
+    #         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+    #     else:
+    #         await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
     @commands.guild_only()
