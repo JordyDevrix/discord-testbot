@@ -65,6 +65,13 @@ def run_discord_bot():
     async def help_command(ctx: commands.Context):
         await ctx.send(f"https://jumbot.jordydevrix.com/")
 
+    @bot.hybrid_command(name="servercount", description="See the amount of servers jumbot is in")
+    async def server_count(ctx: commands.Context):
+        server_len = str(len(bot.guilds))
+        for guild in bot.guilds:
+            print(guild.name)
+        await ctx.send(server_len)
+
     @bot.hybrid_command(name="google", description="Use qooqle to search something for someone")
     async def ik_google_het_wel(ctx: commands.Context, query):
         te_googlen = query.strip().replace(' ', '+')
@@ -488,9 +495,14 @@ def run_discord_bot():
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
 
+    def fetch_servers():
+        supabase_connector.fetch_servers(bot.guilds)
+        return
+
     @bot.event
     async def on_ready():
         print("bot running")
+        fetch_servers()
         change_status.start()
         await bot.tree.sync()
 

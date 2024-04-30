@@ -1,5 +1,6 @@
 import json
 
+import discord.ext.commands
 import postgrest.exceptions
 from supabase import create_client, Client
 
@@ -13,6 +14,21 @@ supabase: Client = create_client(url, key)
 # supabase.table('server').insert({"server_id": "2", "server_name": "test"}).execute()
 
 # supabase.table('server').update({'server_name': 'Australia'}).eq('id', 1).execute()
+
+
+def fetch_servers(guilds: discord.ext.commands.Bot.guilds):
+    for guild in guilds:
+        try:
+            server_id = guild.id
+            server_name = guild.name
+            supabase.table('server').insert(
+                {
+                    "server_id": server_id,
+                    "server_name": server_name,
+                }
+            ).execute()
+        except postgrest.exceptions.APIError:
+            print(f"Skipping, [{guild.id}] already exists")
 
 
 def add_new_server():
