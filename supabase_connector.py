@@ -31,14 +31,6 @@ def fetch_servers(guilds: discord.ext.commands.Bot.guilds):
             print(f"Skipping, [{guild.id}] already exists")
 
 
-def add_new_server():
-    ...
-
-
-def get_role_by_id():
-    ...
-
-
 def get_on_join_roles(server_id):
     response = supabase.table('server').select('on_join_roles').eq('server_id', server_id).execute()
     print(response.data)
@@ -77,52 +69,6 @@ def set_on_join_roles(server_id, server_name, roles):
                 "on_join_roles": roles
             }
         ).eq('server_id', server_id).execute()
-
-
-def set_role(server_id, server_name, role_id, role_to_set):
-    try:
-        response = supabase.table('server').select('*').eq('server_id', server_id).execute()
-
-        # checking if the server table already exists and creating if not #
-        if len(response.data) == 0:
-            supabase.table('server').insert(
-                {
-                    "server_id": server_id,
-                    "server_name": server_name,
-                }
-            ).execute()
-
-        supabase.table('server').update(
-            {
-                role_to_set: role_id
-            }
-        ).eq('server_id', server_id).execute()
-    except Exception as e:
-        print(e)
-        supabase.table('server').insert(
-            {
-                "server_id": server_id,
-                "server_name": server_name,
-            }
-        ).execute()
-
-        supabase.table('server').update(
-            {
-                role_to_set: role_id
-            }
-        ).eq('server_id', server_id).execute()
-
-
-def get_admin_role(server_id):
-    response = supabase.table('server').select('admin_role').eq('server_id', server_id).execute()
-    print(response.data)
-    return response.data
-
-
-def get_moderator_role(server_id):
-    response = supabase.table('server').select('moderator_role').eq('server_id', server_id).execute()
-    print(response.data)
-    return response.data
 
 
 def get_deletelog_permission(server_id):
