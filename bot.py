@@ -347,7 +347,6 @@ def run_discord_bot():
             else:
                 await ctx.send(f"**Het is niet mogelijk om in DM muziek af te spelen**")
         except Exception as e:
-            # await ctx.send("**Er is niemand aanwezig in een voicechannel**")
             print(e)
             await ctx.send(f"**{e}**")
 
@@ -361,12 +360,11 @@ def run_discord_bot():
     @bot.hybrid_command(name="jumboradio", description="gives the current song playing on jumboradio")
     async def get_jumbo_radio(ctx: commands.Context):
         response: dict = jumboreq.get_jumbo_music()
-        if response.get("artist") == "Commercial":
+        artist: str = response.get("artist")
+        if artist.lower().strip() == "commercial" or artist.lower().strip() == "reclame":
             await ctx.send(f"Er speelt momenteel geen muziek: **{response.get('artist')}**")
         else:
             await ctx.send(f"Muziek op jumbo radio: **{response.get('artist')} - {response.get('title')}**")
-
-    # CBR verkeersvragen #
 
     @bot.hybrid_command(name="leerborden", description="leer verkeersborden")
     async def leerborden(ctx: commands.Context):
@@ -404,8 +402,6 @@ def run_discord_bot():
                                              typ=quest[0])
         )
 
-    # Moderation functies #
-
     @bot.hybrid_command(name="timeout", description="give a member a timeout")
     @commands.guild_only()
     @commands.check(has_timeout_permission)
@@ -440,38 +436,6 @@ def run_discord_bot():
             await ctx.reply("no perms, cry cry :_(", ephemeral=True)
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
-
-    # @bot.hybrid_command(name="kick", description="kick a member from the server")
-    # @commands.guild_only()
-    # @commands.check(has_kick_permission)
-    # async def kick(ctx: commands.Context, member: discord.Member, reason=None):
-    #     print(f"{ctx.command} -- {member} -- {commands.bot_has_permissions()}")
-    #     if ctx.author.id == member.id:
-    #         await ctx.send("You cannot kick yourself")
-    #     else:
-    #         try:
-    #             if reason is None:
-    #                 await member.send(f"You have been kicked from {ctx.guild.name}")
-    #             else:
-    #                 await member.send(f"You have been kicked from {ctx.guild.name} for {reason}")
-    #             await member.kick(reason=reason)
-    #             if reason is None:
-    #                 await ctx.send(f"{member.mention} got kicked from the server")
-    #             else:
-    #                 await ctx.send(f"{member.mention} got kicked for {reason}")
-    #         except Exception as e:
-    #             await ctx.send(
-    #                 "You cannot kick higherups, even with that shiny new role u got. so cry cry :_(",
-    #                 ephemeral=True)
-    #             print(e)
-    #
-    # @kick.error
-    # async def kick_error(ctx: commands.Context, error):
-    #     print(error)
-    #     if isinstance(error, (PermissionError, CheckFailure)):
-    #         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
-    #     else:
-    #         await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="removetimeout", description="remove a member's timeout")
     @commands.guild_only()
