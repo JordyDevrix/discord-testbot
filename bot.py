@@ -163,36 +163,6 @@ def run_discord_bot():
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
 
-    # @bot.hybrid_command(name="set_admin_role", description="Set a role as moderator role")
-    # @commands.guild_only()
-    # @commands.check(has_administrator_permission)
-    # async def set_admin_role(ctx: commands.Context, role: discord.Role):
-    #     try:
-    #         server_id = ctx.guild.id
-    #         server_name = ctx.guild.name
-    #         role_id = role.id
-    #         print(role_id)
-    #         supabase_connector.set_role(server_id, server_name, role_id, "admin_role")
-    #         await ctx.send("**Rol is toegevoegd**")
-    #     except Exception as e:
-    #         print(e)
-    #         await ctx.send("**Er ging iets fout, probeer het later opnieuw**")
-
-    # @bot.hybrid_command(name="set_moderator_role", description="Set a role as moderator role")
-    # @commands.guild_only()
-    # @commands.check(has_administrator_permission)
-    # async def set_moderator_role(ctx: commands.Context, role: discord.Role):
-    #     try:
-    #         server_id = ctx.guild.id
-    #         server_name = ctx.guild.name
-    #         role_id = role.id
-    #         print(role_id)
-    #         supabase_connector.set_role(server_id, server_name, role_id, "moderator_role")
-    #         await ctx.send("**Rol is toegevoegd**")
-    #     except Exception as e:
-    #         print(e)
-    #         await ctx.send("**Er ging iets fout, probeer het later opnieuw**")
-
     @bot.hybrid_command(name="set_updates_channel", description="sets a specific channel for updates")
     @commands.guild_only()
     @commands.check(has_administrator_permission)
