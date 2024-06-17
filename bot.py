@@ -46,12 +46,36 @@ def run_discord_bot():
         msg_edit = await ctx.reply(":arrows_clockwise: Generating response...")
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4o",
                 messages=[
                     {"role": "user", "content": msg}
                 ]
             )
             await msg_edit.edit(content=f"`q='{msg}'`\n{response.choices[0].message.content}")
+        except Exception as e:
+            print(e)
+            await ctx.send("Something went wrong")
+
+    @bot.hybrid_command(name="imagen", description="Use the bot's AI image generation functionality")
+    @commands.guild_only()
+    async def imagen(ctx: commands.Context, prompt: str, hurt_my_wallet: bool = False):
+        if hurt_my_wallet:
+            model = "dall-e-3"
+        else:
+            model = "dall-e-2"
+        await ctx.send(f":arrows_clockwise: Generating {prompt}...")
+        try:
+            response = client.images.generate(
+                model=model,
+                prompt=prompt,
+                size="1024x1024",
+                quality="standard",
+                n=1,
+            )
+            image_url = response.data[0].url
+            await ctx.channel.send(image_url)
+            if hurt_my_wallet:
+                await ctx.channel.send("Thanks for hurting my wallet :slight_smile:")
         except Exception as e:
             print(e)
             await ctx.send("Something went wrong")
