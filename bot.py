@@ -16,6 +16,7 @@ from discord.ext.commands import CheckFailure
 
 import jumboreq
 import supabase_connector
+import tts_function
 import verkeersopgaven
 from lethal_functions import OpenNewQuestion
 from permission_check import *
@@ -46,9 +47,10 @@ def run_discord_bot():
     @bot.hybrid_command(name="chat", description="Use the bot's AI functionality")
     @commands.guild_only()
     @app_commands.choices(models=[
-        app_commands.Choice(name="GPT-4-TURBO", value="a"),
-        app_commands.Choice(name="ollama offensive", value="b"),
-        app_commands.Choice(name="GPT-4o", value="c")
+        app_commands.Choice(name="Speed (GPT-4-TURBO)", value="a"),
+        app_commands.Choice(name="Offensive (llama-3)", value="b"),
+        app_commands.Choice(name="Smart (GPT-4o)", value="c"),
+        app_commands.Choice(name="Layla (llama-3)", value="d")
     ])
     async def chat(ctx: commands.Context, msg, models: app_commands.Choice[str] = None):
         if models is None:
@@ -90,6 +92,15 @@ def run_discord_bot():
                     ]
                 )
                 await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response.choices[0].message.content}")
+            except Exception as e:
+                print(e)
+                await ctx.send("Something went wrong")
+
+        elif models.value == "d":
+            try:
+                model = "llama3"
+                response = mama_tweeendertig.ask_mama_layla(msg)
+                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
             except Exception as e:
                 print(e)
                 await ctx.send("Something went wrong")
