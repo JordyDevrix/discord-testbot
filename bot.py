@@ -2,11 +2,15 @@ import datetime
 import json
 import platform
 import random
+
+from discord.app_commands import Choice
 from openai import OpenAI
+
+import mama_tweeendertig
 import random_functions
 
 import discord
-from discord import FFmpegPCMAudio
+from discord import FFmpegPCMAudio, app_commands
 from discord.ext import commands, tasks
 from discord.ext.commands import CheckFailure
 
@@ -18,7 +22,6 @@ from permission_check import *
 
 
 def run_discord_bot():
-
     with open("supacredentials.json", "r") as file:
         data = json.load(file)
         api_key = data.get("GPT_KEY")
@@ -42,19 +45,54 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="chat", description="Use the bot's AI functionality")
     @commands.guild_only()
-    async def chat(ctx: commands.Context, msg):
+    @app_commands.choices(models=[
+        app_commands.Choice(name="GPT-4-TURBO", value="a"),
+        app_commands.Choice(name="ollama offensive", value="b"),
+        app_commands.Choice(name="GPT-4o", value="c")
+    ])
+    async def chat(ctx: commands.Context, msg, models: app_commands.Choice[str] = None):
+        if models is None:
+            models = app_commands.Choice(name="ollama offensive", value="b")
+
         msg_edit = await ctx.reply(":arrows_clockwise: Generating response...")
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "user", "content": msg}
-                ]
-            )
-            await msg_edit.edit(content=f"`q='{msg}'`\n{response.choices[0].message.content}")
-        except Exception as e:
-            print(e)
-            await ctx.send("Something went wrong")
+        print(models.value)
+
+        if models.value == "a":
+            try:
+                model = "gpt-4o"
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "user", "content": msg}
+                    ]
+                )
+                await msg_edit.edit(content=f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}")
+            except Exception as e:
+                print(e)
+                await ctx.send("Something went wrong")
+
+        elif models.value == "b":
+            try:
+                model = "llama3"
+                response = mama_tweeendertig.ask_mama_offensive(msg)
+                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
+            except Exception as e:
+                print(e)
+                await ctx.send("Something went wrong")
+
+        elif models.value == "c":
+            try:
+                model = "gpt-4-turbo"
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "user", "content": msg}
+                    ]
+                )
+                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response.choices[0].message.content}")
+            except Exception as e:
+                print(e)
+                await ctx.send("Something went wrong")
 
     @bot.hybrid_command(name="imagen", description="Use the bot's AI image generation functionality")
     @commands.guild_only()
@@ -124,7 +162,7 @@ def run_discord_bot():
             await ctx.send("No roles found")
         else:
             for idx, role in enumerate(join_role_list):
-                message += f"{idx+1} - {discord.utils.get(ctx.guild.roles, id=role)}\n"
+                message += f"{idx + 1} - {discord.utils.get(ctx.guild.roles, id=role)}\n"
 
             await ctx.send(f"Roles found:\n{message}")
 
