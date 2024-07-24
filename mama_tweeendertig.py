@@ -9,7 +9,7 @@ def ask_mama_offensive(input_data: str) -> str:
 
     json_data = {
         'messages': [
-            {"role": "system", "content": "You are sarcastic and you try to roast everyone."},
+            {"role": "system", "content": "You are sarcastic and you try to roast everyone"},
             {"role": "user", "content": f"{prompt_data}"}
         ],
     }
