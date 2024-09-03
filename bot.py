@@ -54,7 +54,7 @@ def run_discord_bot():
     ])
     async def chat(ctx: commands.Context, msg, models: app_commands.Choice[str] = None):
         if models is None:
-            models = app_commands.Choice(name="ollama offensive", value="b")
+            models = app_commands.Choice(name="Smart (GPT-40)", value="c")
 
         msg_edit = await ctx.reply(":arrows_clockwise: Generating response...")
         print(models.value)
