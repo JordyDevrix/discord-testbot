@@ -253,37 +253,37 @@ def run_discord_bot():
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
 
-    @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
-    @commands.guild_only()
-    @commands.check(has_administrator_permission)
-    async def deletelog(ctx: commands.Context, amount=1):
-        server_id = ctx.guild.id
-        messages = supabase_connector.get_deleted_messages(server_id)
-        messages_sorted = sorted(messages, key=lambda x: x['id'])
-        messages_sorted.reverse()
-        if len(messages) == 0:
-            await ctx.send("No deleted messages found")
-        else:
-            if amount > 10:
-                await ctx.send("Please do not request more then 10 messages")
-            else:
-                if amount == 1:
-                    await ctx.send(f"Sending last message")
-                else:
-                    await ctx.send(f"Sending last {amount} messages")
-                for i in range(amount):
-                    msg: dict = messages_sorted[i]
-                    msg_time = msg.get('message_time').split('.')[0].split('T')
-                    await ctx.send(f"`ID:{msg.get('id')} | {msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
-                                   f"{msg.get('message')}\n"
-                                   f"{msg.get('attachment')}")
-
-    @deletelog.error
-    async def deletelog_error(ctx: commands.Context, error):
-        if isinstance(error, PermissionError):
-            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
-        else:
-            await ctx.send("Something went wrong try again later or contact the developer")
+    # @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
+    # @commands.guild_only()
+    # @commands.check(has_administrator_permission)
+    # async def deletelog(ctx: commands.Context, amount=1):
+    #     server_id = ctx.guild.id
+    #     messages = supabase_connector.get_deleted_messages(server_id)
+    #     messages_sorted = sorted(messages, key=lambda x: x['id'])
+    #     messages_sorted.reverse()
+    #     if len(messages) == 0:
+    #         await ctx.send("No deleted messages found")
+    #     else:
+    #         if amount > 10:
+    #             await ctx.send("Please do not request more then 10 messages")
+    #         else:
+    #             if amount == 1:
+    #                 await ctx.send(f"Sending last message")
+    #             else:
+    #                 await ctx.send(f"Sending last {amount} messages")
+    #             for i in range(amount):
+    #                 msg: dict = messages_sorted[i]
+    #                 msg_time = msg.get('message_time').split('.')[0].split('T')
+    #                 await ctx.send(f"`ID:{msg.get('id')} | {msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
+    #                                f"{msg.get('message')}\n"
+    #                                f"{msg.get('attachment')}")
+    #
+    # @deletelog.error
+    # async def deletelog_error(ctx: commands.Context, error):
+    #     if isinstance(error, PermissionError):
+    #         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+    #     else:
+    #         await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="announce", description="announce something")
     @commands.guild_only()
