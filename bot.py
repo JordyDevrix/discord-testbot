@@ -50,13 +50,14 @@ def run_discord_bot():
         app_commands.Choice(name="Speed (GPT-4-TURBO)", value="a"),
         app_commands.Choice(name="Offensive (llama-3)", value="b"),
         app_commands.Choice(name="Smart (GPT-4o)", value="c"),
-        app_commands.Choice(name="Layla (llama-3)", value="d")
+        app_commands.Choice(name="Layla (llama-3)", value="d"),
+        app_commands.Choice(name="General (llama-3)", value="e"),
     ])
     async def chat(ctx: commands.Context, msg, models: app_commands.Choice[str] = None):
         if models is None:
             models = app_commands.Choice(name="Smart (GPT-40)", value="c")
 
-        msg_edit = await ctx.reply(":arrows_clockwise: Generating response...")
+        msg_edit = await ctx.reply("<a:jumbotloadingemoji:1293627455537680446> Generating response...")
         print(models.value)
 
         if models.value == "a":
@@ -71,7 +72,7 @@ def run_discord_bot():
                 await msg_edit.edit(content=f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}")
             except Exception as e:
                 print(e)
-                await ctx.send("Something went wrong")
+                await msg_edit.edit(content="Something went wrong")
 
         elif models.value == "b":
             try:
@@ -80,7 +81,7 @@ def run_discord_bot():
                 await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
             except Exception as e:
                 print(e)
-                await ctx.send("Something went wrong")
+                await msg_edit.edit(content="Something went wrong")
 
         elif models.value == "c":
             try:
@@ -91,10 +92,10 @@ def run_discord_bot():
                         {"role": "user", "content": msg}
                     ]
                 )
-                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response.choices[0].message.content}")
+                await msg_edit.edit(content=f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}")
             except Exception as e:
                 print(e)
-                await ctx.send("Something went wrong")
+                await msg_edit.edit(content="Something went wrong")
 
         elif models.value == "d":
             try:
@@ -103,7 +104,16 @@ def run_discord_bot():
                 await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
             except Exception as e:
                 print(e)
-                await ctx.send("Something went wrong")
+                await msg_edit.edit(content="Something went wrong")
+
+        elif models.value == "e":
+            try:
+                model = "llama3"
+                response = mama_tweeendertig.ask_general(msg)
+                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
+            except Exception as e:
+                print(e)
+                await msg_edit.edit(content="Something went wrong")
 
     @bot.hybrid_command(name="imagen", description="Use the bot's AI image generation functionality")
     @commands.guild_only()

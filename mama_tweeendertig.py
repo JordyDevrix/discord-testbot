@@ -33,3 +33,18 @@ def ask_mama_layla(input_data: str) -> str:
 
     response_data: dict = response.json()
     return response_data.get('response')
+
+
+def ask_general(input_data: str) -> str:
+    prompt_data = input_data
+
+    json_data = {
+        'messages': [
+            {"role": "user", "content": f"{prompt_data}"}
+        ],
+    }
+
+    response = requests.post(url, headers=headers_data, json=json_data)
+
+    response_data: dict = response.json()
+    return response_data.get('response')
