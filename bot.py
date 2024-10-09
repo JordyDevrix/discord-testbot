@@ -263,37 +263,37 @@ def run_discord_bot():
         else:
             await ctx.send("Something went wrong try again later or contact the developer")
 
-    @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
-    @commands.guild_only()
-    @commands.check(has_administrator_permission)
-    async def deletelog(ctx: commands.Context, amount=1):
-        server_id = ctx.guild.id
-        messages = supabase_connector.get_deleted_messages(server_id)
-        messages_sorted = sorted(messages, key=lambda x: x['id'])
-        messages_sorted.reverse()
-        if len(messages) == 0:
-            await ctx.send("No deleted messages found")
-        else:
-            if amount > 10:
-                await ctx.send("Please do not request more then 10 messages")
-            else:
-                if amount == 1:
-                    await ctx.send(f"Sending last message")
-                else:
-                    await ctx.send(f"Sending last {amount} messages")
-                for i in range(amount):
-                    msg: dict = messages_sorted[i]
-                    msg_time = msg.get('message_time').split('.')[0].split('T')
-                    await ctx.send(f"`ID:{msg.get('id')} | {msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
-                                   f"{msg.get('message')}\n"
-                                   f"{msg.get('attachment')}")
-
-    @deletelog.error
-    async def deletelog_error(ctx: commands.Context, error):
-        if isinstance(error, PermissionError):
-            await ctx.reply("no perms, cry cry :_(", ephemeral=True)
-        else:
-            await ctx.send("Something went wrong try again later or contact the developer")
+    # @bot.hybrid_command(name="deletelog", description="Show all the deleted messages from your server")
+    # @commands.guild_only()
+    # @commands.check(has_administrator_permission)
+    # async def deletelog(ctx: commands.Context, amount=1):
+    #     server_id = ctx.guild.id
+    #     messages = supabase_connector.get_deleted_messages(server_id)
+    #     messages_sorted = sorted(messages, key=lambda x: x['id'])
+    #     messages_sorted.reverse()
+    #     if len(messages) == 0:
+    #         await ctx.send("No deleted messages found")
+    #     else:
+    #         if amount > 10:
+    #             await ctx.send("Please do not request more then 10 messages")
+    #         else:
+    #             if amount == 1:
+    #                 await ctx.send(f"Sending last message")
+    #             else:
+    #                 await ctx.send(f"Sending last {amount} messages")
+    #             for i in range(amount):
+    #                 msg: dict = messages_sorted[i]
+    #                 msg_time = msg.get('message_time').split('.')[0].split('T')
+    #                 await ctx.send(f"`ID:{msg.get('id')} | {msg_time[0]} {msg_time[1]} | {msg.get('user_name')}`\n"
+    #                                f"{msg.get('message')}\n"
+    #                                f"{msg.get('attachment')}")
+    #
+    # @deletelog.error
+    # async def deletelog_error(ctx: commands.Context, error):
+    #     if isinstance(error, PermissionError):
+    #         await ctx.reply("no perms, cry cry :_(", ephemeral=True)
+    #     else:
+    #         await ctx.send("Something went wrong try again later or contact the developer")
 
     @bot.hybrid_command(name="announce", description="announce something")
     @commands.guild_only()
@@ -380,12 +380,12 @@ def run_discord_bot():
             if platform.system() == "Windows":
                 voice_client.play(FFmpegPCMAudio(
                     executable="ffmpeg-2024-03-18-git-a32f75d6e2-essentials_build/bin/ffmpeg.exe",
-                    source="https://playerservices.streamtheworld.com/api/livestream-redirect/JUMBORADIOAAC.aac"
+                    source="https://streams.automates.media/jumboradio"
                 ))
             else:
                 voice_client.play(FFmpegPCMAudio(
                     executable="ffmpeg",
-                    source="https://playerservices.streamtheworld.com/api/livestream-redirect/JUMBORADIOAAC.aac"
+                    source="https://streams.automates.media/jumboradio"
                 ))
             await channel.guild.me.edit(deafen=True)
             await channel.guild.me.edit(mute=False)
@@ -525,30 +525,30 @@ def run_discord_bot():
 
     # Auto disconnect discord bot from voicechannel and change RPC #
 
-    @bot.event
-    async def on_message_delete(message: discord.Message):
-        attachmentlist = ""
-        for idx, attachment in enumerate(message.attachments):
-            attachmentlist += f"{attachment.url}\n"
-
-        deleter = ""
-        async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
-            deleter = entry.user
-
-        try:
-            if supabase_connector.get_deletelog_permission(message.guild.id)[0].get('deletelog'):
-                supabase_connector.add_new_chatlog(
-                    message.guild.name,
-                    message.guild.id,
-                    message.author.id,
-                    message.author.name,
-                    message.content,
-                    message.channel.name,
-                    attachmentlist,
-                    deleter.id
-                )
-        except Exception as e:
-            print(e)
+    # @bot.event
+    # async def on_message_delete(message: discord.Message):
+    #     attachmentlist = ""
+    #     for idx, attachment in enumerate(message.attachments):
+    #         attachmentlist += f"{attachment.url}\n"
+    #
+    #     deleter = ""
+    #     async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
+    #         deleter = entry.user
+    #
+    #     try:
+    #         if supabase_connector.get_deletelog_permission(message.guild.id)[0].get('deletelog'):
+    #             supabase_connector.add_new_chatlog(
+    #                 message.guild.name,
+    #                 message.guild.id,
+    #                 message.author.id,
+    #                 message.author.name,
+    #                 message.content,
+    #                 message.channel.name,
+    #                 attachmentlist,
+    #                 deleter.id
+    #             )
+    #     except Exception as e:
+    #         print(e)
 
     @tasks.loop(seconds=10)
     async def change_status():

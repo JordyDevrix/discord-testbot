@@ -4,7 +4,8 @@ import vlc
 import os
 import time
 
-url = 'https://playerservices.streamtheworld.com/api/livestream-redirect/JUMBORADIOAAC.aac'
+old_url = 'https://playerservices.streamtheworld.com/api/livestream-redirect/JUMBORADIOAAC.aac'
+url = 'https://streams.automates.media/jumboradio'
 
 # define VLC instance
 instance = vlc.Instance('--input-repeat=-1', '--fullscreen')
