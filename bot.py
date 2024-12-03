@@ -2,6 +2,7 @@ import datetime
 import json
 import platform
 import random
+import new_radio
 
 from discord.app_commands import Choice
 from openai import OpenAI
@@ -364,12 +365,57 @@ def run_discord_bot():
                     print(ctx.guild.voice_client.channel)
                     await ctx.guild.voice_client.disconnect(force=True)
                     await ctx.send("**Voice channel verlaten**")
-                    removed = True
-                if len(ctx.guild.voice_channels) == idx + 1 and not removed:
-                    await ctx.send("**Je moet eerst een voicechannel joinen**")
+                #     removed = True
+                # if len(ctx.guild.voice_channels) == idx + 1 and not removed:
+                #     await ctx.send("**Je moet eerst een voicechannel joinen**")
         except Exception as e:
             print(e)
             await ctx.send("**Bot is niet aanwezig in een voice channel**")
+
+    radio_channels = [
+        app_commands.Choice(name="Radio 538", value="https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538AAC.aac"),
+        app_commands.Choice(name="Radio 538 TOP 50", value="https://playerservices.streamtheworld.com/api/livestream-redirect/TLPSTR01AAC.aac"),
+        app_commands.Choice(name="Jumbo Radio", value="https://streams.automates.media/jumboradio"),
+        app_commands.Choice(name="Qmusic", value="https://stream.qmusic.nl/qmusic/aac"),
+        app_commands.Choice(name="Qmusic (Non stop)", value="https://stream.qmusic.nl/nonstop/aac"),
+        app_commands.Choice(name="Sky Radio", value="https://www.mp3streams.nl/zender/skyradio/stream/8-mp3-128"),
+        app_commands.Choice(name="Slam", value="https://25653.live.streamtheworld.com/SLAM_AAC.aac"),
+    ]
+
+    @bot.hybrid_command(name="radio", description="play music")
+    @commands.guild_only()
+    @app_commands.choices(channels=radio_channels)
+    async def play_new_radio(ctx: commands.Context, channels: app_commands.Choice[str] = None):
+
+        if channels is None:
+            # Choose a random radio station
+            channels = random.choice(radio_channels)
+
+        choice: str = channels.value
+        radio_name: str = channels.name
+        print(choice)
+
+        try:
+            channel = ctx.author.voice.channel
+            voice_client = await channel.connect()
+            if platform.system() == "Windows":
+                voice_client.play(FFmpegPCMAudio(
+                    executable="ffmpeg-2024-03-18-git-a32f75d6e2-essentials_build/bin/ffmpeg.exe",
+                    source=choice
+                ))
+            else:
+                voice_client.play(FFmpegPCMAudio(
+                    executable="ffmpeg",
+                    source=choice
+                ))
+            await channel.guild.me.edit(deafen=True)
+            await channel.guild.me.edit(mute=False)
+            await ctx.send(f"Playing **{radio_name}**")
+        except AttributeError as e:
+            if e.name == "channel":
+                await ctx.send(f"**Join eerst een Voice Channel om muziek af te spelen**")
+            else:
+                await ctx.send(f"**Het is niet mogelijk om in DM muziek af te spelen**")
 
     @bot.hybrid_command(name="playradio", description="play music")
     @commands.guild_only()
@@ -519,7 +565,10 @@ def run_discord_bot():
     @bot.event
     async def on_ready():
         print("bot running")
-        fetch_servers()
+        try:
+            fetch_servers()
+        except Exception as e:
+            print(e)
         change_status.start()
         await bot.tree.sync()
 

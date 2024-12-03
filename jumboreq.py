@@ -18,6 +18,7 @@ def send_graphql_request(url, query, variables=None):
 
 def get_jumbo_music():
     graphql_endpoint = "https://jumboradio.playlist-api.deliver.media/graphql"
+    print("Fetching Jumbo Radio music...")
     graphql_query = """
     
     query PlayingNowInfos ($id: String) {
@@ -42,8 +43,12 @@ def get_jumbo_music():
     }
 """
     graphql_variables = {"id": "5f5f12559dc7f2001a6f2ae6"}
-
-    response = send_graphql_request(graphql_endpoint, graphql_query, graphql_variables)
+    try:
+        response = send_graphql_request(graphql_endpoint, graphql_query, graphql_variables)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        exit(1)
+    print(response)
     if response:
         print(response)
         return response.get("data").get("channel").get("playingnow").get("current").get("metadata")
