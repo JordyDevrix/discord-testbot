@@ -123,7 +123,7 @@ def run_discord_bot():
             model = "dall-e-3"
         else:
             model = "dall-e-2"
-        await ctx.send(f":arrows_clockwise: Generating {prompt}...")
+        await ctx.send(f"<a:jumbotloadingemoji:1293627455537680446> Generating {prompt}...")
         try:
             response = client.images.generate(
                 model=model,
