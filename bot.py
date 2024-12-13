@@ -6,8 +6,6 @@ import random
 import time
 
 import new_radio
-from markdownify import markdownify as md
-
 from discord.app_commands import Choice
 from openai import OpenAI
 
