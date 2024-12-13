@@ -9,7 +9,7 @@ from openai import OpenAI
 
 import mama_tweeendertig
 import random_functions
-
+import asyncio
 import discord
 from discord import FFmpegPCMAudio, app_commands
 from discord.ext import commands, tasks
@@ -45,6 +45,62 @@ def run_discord_bot():
             role = discord.utils.get(member.guild.roles, id=role_id)
             await member.add_roles(role)
 
+    def create_ai_message(prompt, models, msg):
+        if models.value == "a":
+            try:
+                model = "gpt-4o"
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "user", "content": msg}
+                    ]
+                )
+                return f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}"
+            except Exception as e:
+                print(e)
+                return Exception
+
+        elif models.value == "b":
+            try:
+                model = "llama3"
+                response = mama_tweeendertig.ask_mama_offensive(msg)
+                return f"`q='{msg}' model:{model}`\n{response}"
+            except Exception as e:
+                print(e)
+                return Exception
+
+        elif models.value == "c":
+            try:
+                model = "gpt-4-turbo"
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "user", "content": msg}
+                    ]
+                )
+                return f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}"
+            except Exception as e:
+                print(e)
+                return Exception
+
+        elif models.value == "d":
+            try:
+                model = "llama3"
+                response = mama_tweeendertig.ask_mama_layla(msg)
+                return f"`q='{msg}' model:{model}`\n{response}"
+            except Exception as e:
+                print(e)
+                return Exception
+
+        elif models.value == "e":
+            try:
+                model = "llama3"
+                response = mama_tweeendertig.ask_general(msg)
+                return f"`q='{msg}' model:{model}`\n{response}"
+            except Exception as e:
+                print(e)
+                return Exception
+
     @bot.hybrid_command(name="chat", description="Use the bot's AI functionality")
     @commands.guild_only()
     @app_commands.choices(models=[
@@ -61,60 +117,27 @@ def run_discord_bot():
         msg_edit = await ctx.reply("<a:jumbotloadingemoji:1293627455537680446> Generating response...")
         print(models.value)
 
-        if models.value == "a":
-            try:
-                model = "gpt-4o"
-                response = client.chat.completions.create(
-                    model=model,
-                    messages=[
-                        {"role": "user", "content": msg}
-                    ]
-                )
-                await msg_edit.edit(content=f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}")
-            except Exception as e:
-                print(e)
-                await msg_edit.edit(content="Something went wrong")
+        response = ""
+        try:
+            response = await asyncio.to_thread(create_ai_message, msg, models, msg)
+            await msg_edit.edit(content=response)
+        except discord.errors.HTTPException as e:
+            print(e)
+            await msg_edit.edit(content=f"Response too long ({len(response)} characters. Max 2000)")
+        except Exception as e:
+            print(e)
+            await msg_edit.edit(content=f"Something went wrong {e}")
 
-        elif models.value == "b":
-            try:
-                model = "llama3"
-                response = mama_tweeendertig.ask_mama_offensive(msg)
-                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
-            except Exception as e:
-                print(e)
-                await msg_edit.edit(content="Something went wrong")
-
-        elif models.value == "c":
-            try:
-                model = "gpt-4-turbo"
-                response = client.chat.completions.create(
-                    model=model,
-                    messages=[
-                        {"role": "user", "content": msg}
-                    ]
-                )
-                await msg_edit.edit(content=f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}")
-            except Exception as e:
-                print(e)
-                await msg_edit.edit(content="Something went wrong")
-
-        elif models.value == "d":
-            try:
-                model = "llama3"
-                response = mama_tweeendertig.ask_mama_layla(msg)
-                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
-            except Exception as e:
-                print(e)
-                await msg_edit.edit(content="Something went wrong")
-
-        elif models.value == "e":
-            try:
-                model = "llama3"
-                response = mama_tweeendertig.ask_general(msg)
-                await msg_edit.edit(content=f"`q='{msg}' model:{model}`\n{response}")
-            except Exception as e:
-                print(e)
-                await msg_edit.edit(content="Something went wrong")
+    def create_ai_image(prompt, model):
+        response = client.images.generate(
+            model=model,
+            prompt=prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+        image_url = response.data[0].url
+        return image_url
 
     @bot.hybrid_command(name="imagen", description="Use the bot's AI image generation functionality")
     @commands.guild_only()
@@ -125,17 +148,8 @@ def run_discord_bot():
             model = "dall-e-2"
         await ctx.send(f"<a:jumbotloadingemoji:1293627455537680446> Generating {prompt}...")
         try:
-            response = client.images.generate(
-                model=model,
-                prompt=prompt,
-                size="1024x1024",
-                quality="standard",
-                n=1,
-            )
-            image_url = response.data[0].url
-            await ctx.channel.send(image_url)
-            if hurt_my_wallet:
-                await ctx.channel.send("Thanks for hurting my wallet :slight_smile:")
+            image = await asyncio.to_thread(create_ai_image, prompt, model)
+            await ctx.channel.send(image)
         except Exception as e:
             print(e)
             await ctx.send("Something went wrong")
@@ -310,23 +324,27 @@ def run_discord_bot():
         if global_announcement:
             if str(ctx.author.id) == "495328668105703426":
                 data = supabase_connector.get_all_update_channels()
+                succescount = 0
                 for server in data:
-                    channel_id = server.get('announce_channel_id')
-                    channel = bot.get_channel(channel_id)
-                    if channel_id is None:
-                        continue
-                    else:
-                        announcement = ""
-                        for part in announcement_parts:
-                            if part is None:
-                                pass
-                            else:
-                                announcement += f"{part}\n"
-                        if mention_everyone:
-                            announcement += f"{ctx.guild.default_role}"
-                        await channel.send(announcement)
-
-                await ctx.send(f"Announcement made by {ctx.author.mention}")
+                    try:
+                        channel_id = server.get('announce_channel_id')
+                        channel = bot.get_channel(channel_id)
+                        if channel_id is None:
+                            continue
+                        else:
+                            announcement = ""
+                            for part in announcement_parts:
+                                if part is None:
+                                    pass
+                                else:
+                                    announcement += f"{part}\n"
+                            if mention_everyone:
+                                announcement += f"{ctx.guild.default_role}"
+                            await channel.send(announcement)
+                            succescount += 1
+                    except Exception as e:
+                        print(e)
+                await ctx.send(f"Announcement made by {ctx.author.mention} to {succescount} / {len(data)} servers")
             else:
                 await ctx.send("You're not one of the bot developers", ephemeral=True)
         else:
@@ -568,7 +586,7 @@ def run_discord_bot():
         try:
             fetch_servers()
         except Exception as e:
-            print(e)
+            print(f"Fetching servers failed: {e}")
         change_status.start()
         await bot.tree.sync()
 
