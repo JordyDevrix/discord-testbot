@@ -101,6 +101,20 @@ def run_discord_bot():
                 print(e)
                 return Exception
 
+        elif models.value == "f":
+            try:
+                model = "o1-preview"
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "user", "content": msg}
+                    ]
+                )
+                return f"`q:'{msg}' model:{model}`\n{response.choices[0].message.content}"
+            except Exception as e:
+                print(e)
+                return Exception
+
     @bot.hybrid_command(name="chat", description="Use the bot's AI functionality")
     @commands.guild_only()
     @app_commands.choices(models=[
@@ -109,6 +123,7 @@ def run_discord_bot():
         app_commands.Choice(name="Smart (GPT-4o)", value="c"),
         app_commands.Choice(name="Layla (llama-3)", value="d"),
         app_commands.Choice(name="General (llama-3)", value="e"),
+        app_commands.Choice(name="Reasoning (GPT-o1-preview)", value="f"),
     ])
     async def chat(ctx: commands.Context, msg, models: app_commands.Choice[str] = None):
         if models is None:
