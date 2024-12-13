@@ -1,8 +1,12 @@
 import datetime
 import json
+import os
 import platform
 import random
+import time
+
 import new_radio
+from markdownify import markdownify as md
 
 from discord.app_commands import Choice
 from openai import OpenAI
@@ -136,10 +140,46 @@ def run_discord_bot():
         response = ""
         try:
             response = await asyncio.to_thread(create_ai_message, msg, models, msg)
-            await msg_edit.edit(content=response)
+
+            # Check if the response is too long and splitting it if it is
+            if len(response) > 2000:
+                print(f"Response too long ({len(response)} characters. Max 2000)")
+                print(response)
+                splitted_response: [str] = []
+                split_response = response.split("```")
+                for idx, text in enumerate(split_response):
+                    if idx % 2 != 0:
+                        splitted_response.append(f"```{text}```")
+                    else:
+                        splitted_response.append(text)
+
+                # Send the split response
+                channel = ctx.channel
+                await msg_edit.edit(content="Response too long, splitting response!")
+                try:
+                    for idx, text in enumerate(splitted_response):
+                        if idx % 2 != 0:
+                            await channel.send(text)
+                        else:
+                            await channel.send(text)
+                        time.sleep(0.7)
+
+                    feedback = await channel.send("## **Happy about the response? Send us some feedback! :D**")
+                    try:
+                        await feedback.add_reaction("👍")
+                        await feedback.add_reaction("👎")
+                    except Exception as e:
+                        print(e)
+                except Exception as e:
+                    print(e)
+                    await msg_edit.edit(content="Something went wrong. Please try again!")
+
+            else:
+                await msg_edit.edit(content=response)
         except discord.errors.HTTPException as e:
             print(e)
             await msg_edit.edit(content=f"Response too long ({len(response)} characters. Max 2000)")
+
         except Exception as e:
             print(e)
             await msg_edit.edit(content=f"Something went wrong {e}")
