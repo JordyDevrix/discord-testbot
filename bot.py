@@ -128,7 +128,7 @@ def run_discord_bot():
     @commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
     async def chat(ctx: commands.Context, msg, models: app_commands.Choice[str] = None):
         if models is None:
-            models = app_commands.Choice(name="Smart (GPT-40)", value="c")
+            models = app_commands.Choice(name="Smart (GPT-4o)", value="c")
 
         msg_edit = await ctx.reply("<a:jumbotloadingemoji:1293627455537680446> Generating response...")
         print(models.value)
