@@ -125,6 +125,7 @@ def run_discord_bot():
         app_commands.Choice(name="General (llama-3)", value="e"),
         app_commands.Choice(name="Reasoning (GPT-o1-preview)", value="f"),
     ])
+    @commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
     async def chat(ctx: commands.Context, msg, models: app_commands.Choice[str] = None):
         if models is None:
             models = app_commands.Choice(name="Smart (GPT-40)", value="c")
@@ -143,6 +144,16 @@ def run_discord_bot():
             print(e)
             await msg_edit.edit(content=f"Something went wrong {e}")
 
+    @chat.error
+    async def chat_error(ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            # send a private message to the user
+            await ctx.send(
+                f"Calm down buddy! "
+                f"Try again in {int(error.retry_after)} {'seconds' if int(error.retry_after) > 1 else 'second'}",
+                ephemeral=True
+            )
+
     def create_ai_image(prompt, model):
         response = client.images.generate(
             model=model,
@@ -156,18 +167,29 @@ def run_discord_bot():
 
     @bot.hybrid_command(name="imagen", description="Use the bot's AI image generation functionality")
     @commands.guild_only()
+    @commands.cooldown(rate=1, per=60, type=commands.BucketType.user)
     async def imagen(ctx: commands.Context, prompt: str, hurt_my_wallet: bool = False):
         if hurt_my_wallet:
             model = "dall-e-3"
         else:
             model = "dall-e-2"
-        await ctx.send(f"<a:jumbotloadingemoji:1293627455537680446> Generating {prompt}...")
+        msg_edit = await ctx.send(f"<a:jumbotloadingemoji:1293627455537680446> Generating {prompt}...")
         try:
             image = await asyncio.to_thread(create_ai_image, prompt, model)
-            await ctx.channel.send(image)
+            await msg_edit.edit(content=image)
         except Exception as e:
             print(e)
             await ctx.send("Something went wrong")
+
+    @imagen.error
+    async def imagen_error(ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            # send a private message to the user
+            await ctx.send(
+                f"Calm down buddy! "
+                f"Try again in {int(error.retry_after)} {'seconds' if int(error.retry_after) > 1 else 'second'}",
+                ephemeral=True
+            )
 
     @bot.hybrid_command(
         name="jumbothelp",
